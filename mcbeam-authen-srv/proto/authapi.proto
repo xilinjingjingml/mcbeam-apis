@@ -1,0 +1,368 @@
+syntax = "proto3";
+package proto;
+
+service Auth {
+	rpc AccountLogin(AccountLoginReq) returns (LoginRes) {} //账号登录
+	rpc SendPhoneCode(SendPhoneCodeReq) returns (SendPhoneCodeRes) {} //发送手机验证码
+	rpc WeChatMiniSessionKey(WeChatMiniSessionKeyReq) returns (WeChatMiniSessionKeyRes) {} //微信小程序SessionKey
+	rpc ByteDanceMiniSessionKey(ByteDanceMiniSessionKeyReq) returns (ByteDanceMiniSessionKeyRes) {} //字节跳动小程序SessionKey
+	rpc KsMonitor(KsMonitorReq) returns (KsMonitorRes) {} //快手监测链接
+	rpc AddressInfo(AddressInfoReq) returns (AddressInfoRes) {} //收货地址列表
+	rpc GetUserUuid(GetUserUuidReq) returns (GetUserUuidRes) {} //获取用户uuid
+	rpc UpdateAccountInfo(UpdateAccountInfoReq) returns (UpdateAccountInfoRes) {} //修改账号信息
+	rpc SendEmail(SendEmailReq) returns (SendEmailRes) {} //发送邮件
+	rpc VerifyEmail(VerifyEmailReq) returns (VerifyEmailRes) {} //验证邮箱
+	rpc ResetEmailPassword(ResetEmailPasswordReq) returns (ResetEmailPasswordRes) {} //重置邮箱密码
+	rpc AccessToken(AccessTokenReq) returns (AccessTokenRes) {} //重置token
+}
+
+service User {
+	rpc GetUserInfo(GetUserInfoReq) returns (GetUserInfoRes) {} //获取用户信息
+	rpc DelFBUserData(DelFBUserDataReq) returns (DelFBUserDataRes) {} //删除FaceBook用户数据操作
+  rpc GetDelFBUserDataInfo(GetDelFBUserDataInfoReq) returns (GetDelFBUserDataInfoRes) {} //查询删除FaceBook用户数据操作信息
+
+	rpc LoadMessages(LoadMessagesReq) returns (LoadMessagesRes) {}
+	rpc ReportProblem(ReportProblemReq) returns (ReportProblemRes) {}
+	rpc LoadReport(LoadReportReq) returns (LoadReportRes) {}
+
+	rpc WeChatScribeMsg(WeChatScribeMsgReq) returns (WeChatScribeMsgRes) {}
+}
+
+//sex 1:男 2：女 0：未知
+
+message AccountLoginReq {
+	int32  plat_aid = 1;
+	string game_gid = 2;
+	string pn = 3;
+	string imei = 4;
+	string device = 5;
+	string area_info = 6;
+	int32  auth_type = 7;//1:游客登录,2:手机密码登录,3:微信密码登录,4:华为密码登录,5:邮箱密码登录
+	string metadata = 8;
+}
+
+message AccessTokenReq {
+	string game_gid = 1;
+	string pn = 2;
+	string scene = 3;
+}
+
+message AccessTokenRes {
+	string code = 1;
+	string msg = 2;
+	string uuid = 3;
+	string token = 4;
+}
+
+message SendEmailReq {
+	string email = 1;
+	int32  flag = 2;//1:验证,2:重置密码
+}
+
+message SendEmailRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message VerifyEmailReq {
+}
+
+message VerifyEmailRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message ResetEmailPasswordReq {
+	string token = 1;
+	string new_password = 2;
+}
+
+message ResetEmailPasswordRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message UpdateAccountInfoReq {
+	string nickname = 1;
+	string headimgurl = 2;
+	int32  sex = 3;
+	int32  auth_type = 4;
+	string account = 5;
+	string old_password = 6;
+	string new_password = 7;
+	string phone = 8;
+	string phone_code = 9;
+}
+
+message UpdateAccountInfoRes {
+	string code = 1;
+	string token = 2;
+}
+
+message PhoneCodeLoginReq {
+	string phone = 1;
+	int32  phone_type = 2;//0:国内 1:国际
+	string phone_code = 3;
+}
+
+//创蓝闪验SDK
+message LocalPhoneLoginReq {
+	string sy_appid = 1;
+	string sy_token = 2;
+	string ip = 3;
+}
+
+message WeChatLoginReq {
+	string openid = 1;//微信openid
+	string code = 2;
+	string rawdata = 3;//微信小程序参数
+	string signature = 4;//微信小程序参数
+	string unionid = 5;
+	string pn = 6;
+	int32  is_qq = 7;//兼容QQ小程序
+	string js_code = 8;//小程序code
+}
+
+message WeChatMiniSessionKeyReq {
+	string game_gid = 1;
+	string pn = 2;
+	string js_code = 3;
+	int32  is_qq = 4;//兼容QQ小程序
+}
+
+message WeChatMiniSessionKeyRes {
+	string code = 1;
+	string openid = 2;//微信openid
+	string unionid = 3;//微信unionid
+}
+
+message HuaWeiLoginReq {
+	string ts = 1;
+	string player_id = 2;
+	string player_level = 3;
+	string player_sign = 4;
+	string pn = 5;
+}
+
+message ByteDanceLoginReq {
+	string openid = 1;//字节跳动openid
+	string rawdata = 2;//字节跳动小程序参数
+	string signature = 3;//字节跳动小程序参数
+	string pn = 4;
+}
+
+message ByteDanceMiniSessionKeyReq {
+	string pn = 1;
+	string js_code = 2;
+}
+
+message ByteDanceMiniSessionKeyRes {
+	string code = 1;
+	string openid = 2;//字节跳动openid
+}
+
+message OppoLoginReq {
+	string user_id = 1;
+	string token = 2;
+	string pn = 3;
+}
+
+message FaceBookLoginReq {
+	string face_id = 1;
+	string user_token = 2;
+	string pn = 3;
+}
+
+message LenovoLoginReq {
+	string realm = 1;//联想appid
+	string lpsust = 2;//联想用户ticket
+}
+
+message AppleLoginReq {
+	string user_id = 1;//授权用户的唯一标识类似微信unionId
+	string code = 2;//授权码
+	string user_token = 3;//授权用户的JWT凭证
+	string pn = 4;
+}
+
+message LeYuanLoginReq {
+	string token = 1;
+	string pn = 2;
+	int32  env = 3; //0:测试，1:正式
+}
+
+message LoginReq {
+	string game_gid = 1;
+	string pn = 2;
+	string imei = 3;
+	string device = 4;
+	int32  type = 5;
+	string account = 6;
+	string password = 7;
+	string nickname = 8;
+	string headimgurl = 9;
+	int32  sex = 10;
+	string ip = 11;
+	string uuid = 12;
+	int32  flag = 13; //0:不更新用户信息,1:更新用户信息
+	string area_info = 14;
+	int32  plat_aid = 15;
+	string wx_openid = 16;
+	string qq_openid = 17;
+	string scene = 18;
+}
+
+message LoginRes {
+	string code = 1;
+	string uuid = 2;
+	string account = 3;
+	string password = 4;
+	string nickname = 5;
+	string headimgurl = 6;
+	int32  sex = 7;
+	string token = 8; //jwt票据
+	bool   new_user = 9; //新玩家标记false
+	string msg = 10;
+	string auth_type = 11;
+	string ks_callback = 12; //快手回调信息
+	string area_info = 13;
+}
+
+message SendPhoneCodeReq {
+	string uuid = 1;
+	string phone = 2;
+	int32  phone_type = 3;//0:国内 1:国际
+}
+
+message SendPhoneCodeRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message KsMonitorReq {
+	string pn      = 1;
+	string idfaMD5 = 2;
+	string imeiMD5 = 3;
+	string callback = 4;
+	int32  campaignid = 5;
+}
+
+message KsMonitorRes {
+	string code = 1;
+}
+
+message GetUserInfoReq {
+	string game_gid = 1;
+	string openid = 2;
+}
+
+message GetUserInfoRes {
+	string code = 1;
+	string nickname = 2;
+	string headimgurl = 3;
+	int32  sex = 4;
+	string idcard = 5;
+	string area_info = 6;
+	string address = 7;
+	int32  email_verify = 8;
+	string wx_openid = 9;
+	string auth_type = 10;
+}
+
+message Address {
+	string address_gid = 1;
+	int32  country_id = 2;
+	string country = 3;
+	int32  province_id = 4;
+	string province = 5;
+	int32  city_id = 6;
+	string city = 7;
+	int32  county_id = 8;
+	string county = 9;
+	int32  town_id = 10;
+	string town = 11;
+	string address_detail = 12;
+	string name = 13;
+	int32  is_default = 14;
+	string tel = 15;
+}
+
+message AddressInfoReq {
+	string address = 1;
+}
+
+message AddressInfoRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message GetUserUuidReq {
+	string game_gid = 1;
+	string openid = 2;
+}
+
+message GetUserUuidRes {
+	string uuid = 1;
+}
+
+message DelFBUserDataReq {
+	string signed_request = 1;
+}
+
+message DelFBUserDataRes {
+	string url = 1;
+	string confirmation_code = 2;
+}
+
+message GetDelFBUserDataInfoReq {
+	string confirmation_code = 1;
+}
+
+message GetDelFBUserDataInfoRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message LoadMessagesReq {
+}
+
+message LoadMessagesRes {
+	string code = 1;
+	string msg = 2;
+	string messages = 3;
+}
+
+message ReportProblemReq {
+	int32  type = 1;//1:账户问题,2:存款和计费,3:报告崩溃,4:举报作弊,5:报告bug,6:反馈建议,7:其他问题,0:系统回复
+	string match_id = 2;
+	string report_nickname = 3;
+	string issue = 4;
+	string images = 5;
+	string report_gid = 6;
+}
+
+message ReportProblemRes {
+	string code = 1;
+	string msg = 2;
+}
+
+message LoadReportReq {
+	string report_gid = 1;
+}
+
+message LoadReportRes {
+	string code = 1;
+	string msg = 2;
+	string report = 3;
+}
+
+message WeChatScribeMsgReq {
+	string pn = 1;
+	string template_id = 2;
+	int32  page_id = 3;
+}
+
+message WeChatScribeMsgRes {
+	string code = 1;
+	string msg = 2;
+}

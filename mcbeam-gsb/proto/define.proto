@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package gsbase;
+option go_package = "./;gsbase";
+
+// 房间状态
+enum RoomStatus {
+  Unknown = 0; // 初始化完成
+  Initialized = 1; // 初始化完成
+  Started = 2; // 进行中
+  Dismissed = 3; // 已解散
+}
+
+// 房间类型
+enum RoomType {
+  NormalRoom = 0; // 普通房
+  PrivateRoom = 1; // 私人房
+  ClubRoom = 2; // 俱乐部房间
+}
+
+enum PlayerGameStatus {
+  Invalid = 0;
+  Joined = 1;// 已加入
+  Leave = 2;// 已离开
+}
+
+enum DismissCode {
+  // 正常解散
+  GameOver = 0;
+  // 系统解散
+  System = 1;
+  // 超时解散
+  TimeOut = 2;
+  // 游戏服务器解散
+  GameDismiss = 3;
+  // 玩家离开，人数不足
+  DismissCodePlayerNotEnough = 4;
+  // 管理员解散
+  DismissCodeAdmin = 255;
+}
+
+message GameResult {
+  //@inject_tag: bson:"room_id"
+  string  room_id = 1;
+  //@inject_tag: bson:"game_gid"
+  string game_gid = 2;
+  //@inject_tag: bson:"properties"
+  string properties = 3;
+  //@inject_tag: bson:"create_at"
+  int64 create_at = 4;
+  //@inject_tag: bson:"expire_at"
+  int64 expire_at = 5;
+  //@inject_tag: bson:"share_code,omitempty"
+  string share_code = 6;
+  //@inject_tag: bson:"plat_aid"
+  int32 plat_aid = 7;
+  //@inject_tag: bson:"settle_item"
+  int32 settle_item = 8;
+  //@inject_tag: bson:"date"
+  int32 date = 9;
+  //@inject_tag: bson:"status"
+  RoomStatus status = 10;
+  //@inject_tag: bson:"type"
+  int32 type = 11;
+  //@inject_tag: bson:"match_cid"
+  string match_cid = 12;
+  //@inject_tag: bson:"players"
+  repeated PlayerGameData players = 13;
+  //@inject_tag: bson:"rounds"
+  repeated RoundData rounds = 14;
+  //@inject_tag: bson:"server_id"
+  string server_id = 15;
+  //@inject_tag: bson:"tags,omitempty"
+  map<string, string> tags = 16;
+  //@inject_tag: bson:"match_id,omitempty"
+  string match_id = 17;
+  //@inject_tag: bson:"update_time"
+  int64 update_time = 18;
+  //@inject_tag: bson:"max_round_num"
+  int32 max_round_num = 19;
+  //@inject_tag: bson:"labels"
+  repeated string labels = 20;
+  //@inject_tag: bson:"dismiss_code"
+  int32 dismiss_code = 21;
+  //@inject_tag: bson:"aliases"
+  repeated string aliases = 22;
+
+}
+
+message PlayerGameData {
+  //@inject_tag: bson:"openid"
+  string  openid = 1; // 玩家ID
+  //@inject_tag: bson:"win_lose"
+  int64  win_lose = 2; // 玩家输赢
+  //@inject_tag: bson:"status"
+  PlayerGameStatus status = 3;   // 玩家状态
+  //@inject_tag: bson:"update_time"
+  int64  update_time = 4;  // 最后一次更新时间
+  //@inject_tag: bson:"labels"
+  repeated string labels = 5; // 战绩标签
+  //@inject_tag: bson:"tags,omitempty"
+  map<string, string> tags = 6; // 战绩额外参数
+  //@inject_tag: bson:"nickname"
+  string nickname = 7;
+}
+
+
+message BattleData {
+  //@inject_tag: bson:"openid"
+  string  openid = 1; // 玩家ID
+  //@inject_tag: bson:"win_lose"
+  int64  win_lose = 2; // 玩家输赢
+  //@inject_tag: bson:"labels"
+  repeated string labels = 3; // 战绩标签
+}
+
+message RoundData {
+  //@inject_tag: bson:"index"
+  int32 index = 1;
+  //@inject_tag: bson:"players"
+  repeated BattleData players = 2;
+  //@inject_tag: bson:"start_time"
+  int64 start_time = 3;
+  //@inject_tag: bson:"finish_time"
+  int64 finish_time = 4;
+}
+
+
+// 房间状态 topic game.room.stats
+message GameRoomStats {
+  // 房间ID
+  string  room_id = 1;
+  // 游戏ID
+  string game_gid = 2;
+  // 房间类型
+  RoomType type = 3;
+  // 房间创建时间
+  int64 create_at = 4;
+  // 房间场次
+  string match_cid = 5;
+  // 房间号
+  string share_code = 6;
+  // 平台
+  int32 plat_aid = 7;
+  // 当前玩家人数
+  int32 cur_player_num = 8;
+  // 最大游戏人数
+  int32 max_player_num = 9;
+  // 房间标签
+  repeated string labels = 11;
+  // 房间别名
+  repeated string aliases = 12;
+  // 房间当前状态
+  RoomStatus status = 13;
+  // 玩家列表
+  repeated GamePlayerStats players = 14;
+  // 房主
+  string creator = 15;
+  // 参数
+  string properties = 16;
+  // 更新版本
+  int64 version = 17;
+  // 实例ID
+  string server_id = 18;
+  // 房间状态数据
+  string stats = 19;
+}
+
+message GamePlayerStats {
+  //@inject_tag: bson:"openid"
+  string  openid = 1; // 玩家ID
+  //@inject_tag: bson:"metadata"
+  map<string, string> metadata = 2;
+  //@inject_tag: bson:"nickname"
+  string nickname = 3;
+  //  int32 type = 4;
+  //@inject_tag: bson:"avatar"
+  string avatar = 5; // 头像
+  //@inject_tag: bson:"win_lose"
+  //@inject_tag: bson:"status"
+  PlayerGameStatus status = 6;   // 玩家状态
+}

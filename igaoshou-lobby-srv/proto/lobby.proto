@@ -1,0 +1,289 @@
+syntax = "proto3";
+
+package lobby;
+option go_package = "./proto;lobby";
+
+
+service Lobby{
+  // 登录接口
+  rpc Login(LoginReq) returns (LoginRsp) {}
+  // 获取游戏token
+  rpc GetAccessToken(GetAccessTokenReq) returns (GetAccessTokenRsp){}
+  // 获取大厅配置
+  rpc GetConfig(GetConfigReq) returns (GetConfigRsp) {}
+  //  获取玩家信息
+  rpc GetPlyDetail(GetPlyDetailReq) returns (GetPlyDetailRsp) {}
+  // 拉取玩家道具
+  rpc GetItem(GetItemReq) returns(GetItemRsp) {}
+  // 获取玩家游戏列表
+  rpc GetPlyGameList(GetPlyGameListReq) returns (GetPlyGameListRsp){}
+  // g币转换为ticket
+  rpc Coin2Ticket(Coin2TicketReq) returns (Coin2TicketRsp) {}
+  // 刷新token
+  rpc RefreshToken(RefreshTokenReq) returns (RefreshTokenRsp) {}
+  // 获取在线人数
+  rpc GetOnlineNum(GetOnlineNumReq) returns (GetOnlineNumRsp) {}
+
+  // 验证邮箱
+  rpc VerifyEmail(EmailVerificationReq) returns (EmailVerificationRsp) {}
+  // 重置密码
+  rpc ResetPassword(ResetPasswordReq) returns (ResetPasswordRsp) {}
+  // 更新道具
+  rpc UpdateItem(UpdateItemReq) returns (UpdateItemRsp) {}
+
+  // 获取玩家状态
+  rpc GetPlyStatus(GetPlyStatusReq) returns (GetPlyStatusRsp) {}
+
+  // 获取玩家在线状态
+  rpc GetOnlineStatus(GetOnlineStatusReq) returns (GetOnlineStatusRsp) {}
+}
+
+
+service LobbyRpc {
+  rpc GetLobbyConfig(GetLobbyConfigReq) returns (GetLobbyConfigRsp) {}
+}
+
+message GetAccessTokenReq {
+  string game_gid = 1;
+  string pn = 2;
+}
+
+message GetAccessTokenRsp {
+  string err = 1;
+  string openid = 2;
+  string token = 3;
+
+  int32 level = 4; // 游戏等级
+  int32 exp = 5; // 游戏经验值
+  int64 join_time = 6; // 第一次加入游戏时间(当前游戏)
+  repeated Item item_list = 7; // 道具列表
+  int32 max_exp = 8;
+}
+
+message GetOnlineNumReq {
+  string game_list = 1;
+}
+
+message GetOnlineNumRsp {
+  map<string, int32> online_num_list = 1;
+}
+message Item {
+  enum Type {
+    Platform = 0; // 平台道具
+    Game = 1; // 游戏道具
+  }
+  int32 id = 1;  // 道具ID
+  int64 num = 2; // 道具数量
+  Type type = 3; // 0平台道具 1游戏道具
+  int64 expire_at = 4; // 过期时间
+}
+
+message LoginReq {
+  string token = 1;
+  int64 req_time = 2;
+  string auth_method = 4;
+  string auth_info = 5; // auth 相关参数
+}
+
+message LoginRsp {
+  string err = 1;
+  string token = 2; // 平台账号
+  string openid = 3; // 游戏账号
+  bool newbie = 4; // 是否为新玩家
+  string area_info = 5; // 所在区域
+  int32 plat_level = 6; // 平台level
+  int32 plat_exp = 7; // 平台 exp
+  //  int64 diamond = 8; // 现金
+  //  int64 ticket_z = 9; // ticket z
+  int32 level = 10; // 游戏等级
+  int32 exp = 11; // 游戏经验值
+  //  int64 score = 12; // 游戏积分
+  int64 reg_time = 13; // 注册时间
+  int64 join_time = 14; // 第一次加入游戏时间(当前游戏)
+  repeated Item item_list = 15; // 道具列表
+  string nickname = 16;
+  int32 sex = 17;
+  string headimage = 18;
+  map<string, string> metadata = 19;
+  int32 max_exp = 20;
+  int32 max_plat_exp = 21;
+  int32 game_count = 22;
+  int64 server_time = 23; // 服务器时间
+  int32 plat_game_count = 24; // 全平台游戏局数
+  int32 game_round_count = 25; // 游戏比赛回合次数，(比赛里每进行一局，记一次)
+  uint64 uid = 26;// 玩家数字ID
+}
+
+// 定义已转移到 gitee.com/microbeam/mcbeam-apis/mcbeam-common/proto
+//// 玩家登陆通知
+//// player.login.event
+//message LoginNot {
+//  string openid = 1;
+//  string game_gid = 2;
+//  string uuid = 3;
+//  int64 reg_time = 4;
+//  int64 game_reg_time = 5; // 第一次加入游戏时间(当前游戏)
+//  string nickname = 6;
+//  int32 sex = 7;
+//  string headimage = 8;
+//  int32 plat_level = 9; // 平台level
+//  int32 plat_exp = 10; // 平台 exp
+//  int32 level = 11; // 游戏等级
+//  int32 exp = 12; // 游戏经验值
+//  string pn = 13;
+//  int32 plat_aid = 14;
+//  int64 login_time = 15;
+//}
+
+message GetConfigReq {
+
+}
+
+message GetConfigRsp {
+  string err = 1;
+  map<string, string> config = 2;
+}
+
+message GetLobbyConfigReq {
+  string game_gid = 1;
+  int32 plat_aid = 2;
+}
+
+message GetLobbyConfigRsp {
+  string err = 1;
+  map<string, string> config = 2;
+}
+
+message GetPlyDetailReq {
+  string openid = 1;
+  string game_gid = 2;
+}
+
+message GetPlyDetailRsp {
+  string openid = 1;
+  string nickname = 2;
+  string headimage = 3;
+  string area_info = 4;
+  int32 level = 5;
+  int32 plat_level = 6; // 平台level
+  int32 exp = 7;
+  int32 plat_exp = 8;
+  string err = 9;
+  repeated Item props = 10;
+  int32 game_count = 11;
+  int32 plat_game_count = 12; // 全平台游戏局数
+  int32 game_round_count = 13; // 游戏比赛回合次数，(比赛里每进行一局，记一次)
+  int32 win_round_count = 14; // 当前游戏胜利局数
+}
+
+message GetItemReq {
+
+}
+
+message GetItemRsp {
+  repeated Item item_list = 1; // 道具列表
+  string err = 2;
+}
+
+message GetPlyGameListReq {
+  string openid = 1;
+}
+
+message GetPlyGameListRsp {
+  message GameData {
+    string game_id = 1;
+    int32 level = 2;
+    int32 exp = 3;
+    int32 max_exp = 4;
+  }
+  repeated GameData list = 1;
+  int32 plat_level = 2;
+  int32 plat_exp = 3;
+  int32 max_plat_exp = 4;
+  string err = 5;
+}
+
+message Coin2TicketReq{
+
+}
+
+message Coin2TicketRsp {
+  string err = 1;
+  int64 coin = 2; // 游戏币转换ticket份额
+  int64 ticket = 3; // 最新ticket数量
+  int64 convert = 4; // 游戏币转换ticket数量
+}
+
+message RefreshTokenReq {
+  string auth_method = 1;
+  string auth_info = 2; // auth 相关参数
+}
+
+message RefreshTokenRsp {
+  string err = 1;
+  string token = 2;
+}
+
+
+message EmailVerificationReq {
+  string t = 1; // token
+}
+
+message EmailVerificationRsp {
+  string code = 1;
+  string msg = 2;
+}
+
+message ResetPasswordReq {
+  string token = 1;
+  string password = 2;
+}
+
+message ResetPasswordRsp {
+  string code = 1;
+  string msg = 2;
+}
+
+message UpdateItemReq {
+  string reason = 1;
+  repeated Item item_list = 2;
+  map<string, string> tags = 3;
+}
+
+message UpdateItemRsp {
+  string err = 1;
+}
+
+message GetPlyStatusReq {
+
+}
+
+message GetPlyStatusRsp {
+  enum Type {
+    AsyncGame = 0; // 异步比赛
+    RealTimeGame = 1; // 实时游戏
+  }
+  string err = 1;
+  Type game_type = 2;
+  string match_id = 3;
+  string room_id = 4;
+  string server_id = 5;
+  string game_gid = 6;
+  string match_cid = 7;
+  map<string, string> metadata = 8;
+}
+
+message GetOnlineStatusReq {
+  repeated string id_list = 1;
+}
+
+message GetOnlineStatusRsp {
+  message Status {
+    string openid = 1; // 玩家ID
+    string nickname = 2; // 昵称
+    string avatar = 3; // 头像
+    bool online = 4; // 是否在线,0离线1在线
+  }
+  string err = 1;
+  repeated Status status_list = 2;
+}

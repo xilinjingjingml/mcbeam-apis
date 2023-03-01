@@ -1,0 +1,1705 @@
+syntax = "proto3";
+package proto;
+option go_package = "./proto;proto";
+
+service Developer {
+    rpc CreateDeveloper (CreateDeveloperReq) returns (CreateDeveloperRes) {}
+    rpc LoginDeveloper (LoginDeveloperReq) returns (LoginDeveloperRes) {}
+    rpc UpdateDeveloper (UpdateDeveloperReq) returns (UpdateDeveloperRes) {}
+}
+
+service Game {
+    rpc CreateGame (OperateGameReq) returns (OperateGameRes) {}
+    rpc LoadGame (LoadGameReq) returns (LoadGameRes) {}
+    rpc UpdateGame (OperateGameReq) returns (OperateGameRes) {}
+    rpc LoadGameData (LoadGameDataReq) returns (LoadGameDataRes) {}
+}
+
+service Match {
+    rpc CreateMatchDetail (OperateMatchDetailReq) returns (OperateMatchDetailRes) {}
+    rpc LoadMatchDetail (LoadMatchDetailReq) returns (LoadMatchDetailRes) {}
+    rpc UpdateMatchDetail (OperateMatchDetailReq) returns (OperateMatchDetailRes) {}
+    rpc CreateMatchRewardsTemplate (CreateMatchRewardsTemplateReq) returns (CreateMatchRewardsTemplateRes) {}
+    rpc LoadMatchRewardsTemplate (LoadMatchRewardsTemplateReq) returns (LoadMatchRewardsTemplateRes) {}
+    rpc UpdateMatchRewardsTemplate (UpdateMatchRewardsTemplateReq) returns (UpdateMatchRewardsTemplateRes) {}
+    rpc CreateMatchTemplate (CreateMatchTemplateReq) returns (CreateMatchTemplateRes) {}
+    rpc LoadMatchTemplate (LoadMatchTemplateReq) returns (LoadMatchTemplateRes) {}
+    rpc UpdateMatchTemplate (UpdateMatchTemplateReq) returns (UpdateMatchTemplateRes) {}
+    rpc AddMatchDetail (AddMatchDetailReq) returns (AddMatchDetailRes) {}
+    rpc EditMatchDetail (EditMatchDetailReq) returns (EditMatchDetailRes) {}
+    rpc SelectMatchDetail (SelectMatchDetailReq) returns (SelectMatchDetailRes) {}
+    rpc CreateMatchLabels (CreateMatchLabelsReq) returns (CreateMatchLabelsRes) {}
+    rpc DeleteMatchLabels (DeleteMatchLabelsReq) returns (DeleteMatchLabelsRes) {}
+    rpc EditMatchLabels (EditMatchLabelsReq) returns (EditMatchLabelsRes) {}
+    rpc LoadMatchLabels (LoadMatchLabelsReq) returns (LoadMatchLabelsRes) {}
+    rpc ReadRawConfig (ReadRawConfigReq) returns (ReadRawConfigRes) {}
+}
+
+service Config {
+    rpc LoadGameInfo (LoadGameInfoReq) returns (LoadGameInfoRes) {}
+    rpc LoadOnlineParam (LoadOnlineParamReq) returns (LoadOnlineParamRes) {}
+    rpc CheckUpdate (CheckUpdateReq) returns (CheckUpdateRes) {}
+    rpc LoadNotice (LoadNoticeReq) returns (LoadNoticeRes) {}
+    rpc RefreshCache (RefreshCacheReq) returns (RefreshCacheRes) {}
+
+    rpc LoadPlat (LoadPlatReq) returns (LoadPlatRes) {}
+    rpc LoadApp (LoadAppReq) returns (LoadAppRes) {}
+
+    rpc OperateGameParam (OperateGameParamReq) returns (OperateGameParamRes) {}
+    rpc LoadGameParam (LoadGameParamReq) returns (LoadGameParamRes) {}
+    rpc OperateGameVersion (OperateGameVersionReq) returns (OperateGameVersionRes) {}
+    rpc LoadGameVersion (LoadGameVersionReq) returns (LoadGameVersionRes) {}
+    rpc LoadGameVersionLog (LoadGameVersionLogReq) returns (LoadGameVersionLogRes) {}
+    rpc CreatePlatConfig (CreatePlatConfigReq) returns (CreatePlatConfigRes) {}
+    rpc DeletePlatConfig (DeletePlatConfigReq) returns (DeletePlatConfigRes) {}
+    rpc EditPlatConfig (EditPlatConfigReq) returns (EditPlatConfigRes) {}
+    rpc LoadPlatConfig (LoadPlatConfigReq) returns (LoadPlatConfigRes) {}
+    rpc OperateExchangeTpl (OperateExchangeTplReq) returns (OperateExchangeTplRes) {}
+    rpc LoadExchangeTpl (LoadExchangeTplReq) returns (LoadExchangeTplRes) {}
+    rpc OperateSignTpl (OperateSignTplReq) returns (OperateSignTplRes) {}
+    rpc LoadSignTpl (LoadSignTplReq) returns (LoadSignTplRes) {}
+    rpc ReadTaskConfig (ReadTaskConfigReq) returns (ReadTaskConfigRes) {}
+    rpc LoadTaskConfig (LoadTaskConfigReq) returns (LoadTaskConfigRes) {}
+    rpc ReadLevelUpConfig (ReadLevelUpConfigReq) returns (ReadLevelUpConfigRes) {}
+    rpc LoadLevelUpConfig (LoadLevelUpConfigReq) returns (LoadLevelUpConfigRes) {}
+    rpc CreateHomeConfig (CreateHomeConfigReq) returns (CreateHomeConfigRes) {}
+    rpc DeleteHomeConfig (DeleteHomeConfigReq) returns (DeleteHomeConfigRes) {}
+    rpc EditHomeConfig (EditHomeConfigReq) returns (EditHomeConfigRes) {}
+    rpc LoadHomeConfig (LoadHomeConfigReq) returns (LoadHomeConfigRes) {}
+    rpc CreateActivityConfig (CreateActivityConfigReq) returns (CreateActivityConfigRes) {}
+    rpc DeleteActivityConfig (DeleteActivityConfigReq) returns (DeleteActivityConfigRes) {}
+    rpc EditActivityConfig (EditActivityConfigReq) returns (EditActivityConfigRes) {}
+    rpc LoadActivityConfig (LoadActivityConfigReq) returns (LoadActivityConfigRes) {}
+    rpc CreateAdConfig (CreateAdConfigReq) returns (CreateAdConfigRes) {}
+    rpc DeleteAdConfig (DeleteAdConfigReq) returns (DeleteAdConfigRes) {}
+    rpc EditAdConfig (EditAdConfigReq) returns (EditAdConfigRes) {}
+    rpc LoadAdConfig (LoadAdConfigReq) returns (LoadAdConfigRes) {}
+    rpc CreateNoticeConfig (CreateNoticeConfigReq) returns (CreateNoticeConfigRes) {}
+    rpc DeleteNoticeConfig (DeleteNoticeConfigReq) returns (DeleteNoticeConfigRes) {}
+    rpc EditNoticeConfig (EditNoticeConfigReq) returns (EditNoticeConfigRes) {}
+    rpc LoadNoticeConfig (LoadNoticeConfigReq) returns (LoadNoticeConfigRes) {}
+    rpc LoadMessages (LoadMessagesInfoReq) returns (LoadMessagesInfoRes) {}
+    rpc SendMessage (SendMessageReq) returns (SendMessageRes) {}
+    rpc LoadReports (LoadReportsReq) returns (LoadReportsRes) {}
+    rpc ReplyProblem (ReplyProblemReq) returns (ReplyProblemRes) {}
+    rpc OperateAppConfig (OperateAppConfigReq) returns (OperateAppConfigRes) {}
+    rpc LoadAppConfig (LoadAppConfigReq) returns (LoadAppConfigRes) {}
+    rpc LoadErrorDefinition (LoadErrorDefinitionReq) returns (LoadErrorDefinitionRes) {}
+    rpc LoadErrorDesc (LoadErrorDescReq) returns (LoadErrorDescRes) {}
+    rpc CreateErrorDesc (CreateErrorDescReq) returns (CreateErrorDescRes) {}
+    rpc EditErrorDesc (EditErrorDescReq) returns (EditErrorDescRes) {}
+    rpc PurgeCndCache (PurgeCndCacheReq) returns (PurgeCndCacheRes) {}
+    rpc LoadPurgeHistory (LoadPurgeHistoryReq) returns (LoadPurgeHistoryRes) {}
+    rpc OperateItemConfig (OperateItemConfigReq) returns (OperateItemConfigRes) {}
+    rpc LoadItemConfig (LoadItemConfigReq) returns (LoadItemConfigRes) {}
+    rpc OperateExCodeConfig (OperateExCodeConfigReq) returns (OperateExCodeConfigRes) {}
+    rpc LoadExCodeConfig (LoadExCodeConfigReq) returns (LoadExCodeConfigRes) {}
+    rpc LoadExCode (LoadExCodeReq) returns (LoadExCodeRes) {}
+    rpc LoadExCodeLog (LoadExCodeLogReq) returns (LoadExCodeLogRes) {}
+    rpc OperateMailConfig (OperateMailConfigReq) returns (OperateMailConfigRes) {}
+    rpc LoadMailConfig (LoadMailConfigReq) returns (LoadMailConfigRes) {}
+}
+
+service OptUser {
+    rpc UserDetail (UserDetailReq) returns (UserDetailRes) {}
+    rpc OperateUser (OperateUserReq) returns (OperateUserRes) {}
+    rpc UserItemDataDetail (UserItemDataDetailReq) returns (UserItemDataDetailRes) {}
+    rpc UpdateUserItemDataDetail (UpdateUserItemDataDetailReq) returns (UpdateUserItemDataDetailRes) {}
+}
+
+service Log {
+    rpc LoadPlayLog (LoadPlayLogReq) returns (LoadPlayLogRes) {}
+    rpc LoadMatchLog (LoadMatchLogReq) returns (LoadMatchLogRes) {}
+    rpc LoadMatchData (LoadMatchDataReq) returns (LoadMatchDataRes) {}
+    rpc LoadBlhNoticeLog (LoadBlhNoticeLogReq) returns (LoadBlhNoticeLogRes) {}
+    rpc LoadOrderLog (LoadOrderLogReq) returns (LoadOrderLogRes) {}
+    rpc DoOrderInfoLog (DoOrderInfoLogReq) returns (DoOrderInfoLogRes) {}
+    rpc LoadExchangeLog (LoadExchangeLogReq) returns (LoadExchangeLogRes) {}
+    rpc OperateExchangeLog (OperateExchangeLogReq) returns (OperateExchangeLogRes) {}
+    rpc LoadWinningRateRank (LoadWinningRateRankReq) returns (LoadWinningRateRankRes) {}
+    rpc LoadUserExchange (LoadUserExchangeReq) returns (LoadUserExchangeRes) {}
+    rpc PlayerLogAnalyse (PlayerLogAnalyseReq) returns (PlayerLogAnalyseRes) {}
+    rpc MatchRankList (MatchRankListReq) returns (MatchRankListRes) {}
+    rpc LoadPromoteBind (LoadPromoteBindReq) returns (LoadPromoteBindRes) {}
+    rpc LoadPromoteUuid (LoadPromoteUuidReq) returns (LoadPromoteUuidRes) {}
+    rpc LoadPayLog (LoadPayLogReq) returns (LoadPayLogRes) {}
+    rpc LoadWithdrawalOrder (LoadWithdrawalOrderReq) returns (LoadWithdrawalOrderRes) {}
+    rpc OperateWithdrawalOrder (OperateWithdrawalOrderReq) returns (OperateWithdrawalOrderRes) {}
+}
+
+service Stats {
+    rpc LoadGameStats (GameStatsReq) returns (GameStatsRes) {}
+    rpc GameStats (GameStatsReq) returns (GameStatsRes) {}
+    rpc LoadItemRank (LoadItemRankReq) returns (LoadItemRankRes) {}
+    rpc LoadGameNumByMatchCid (LoadGameNumByMatchCidReq) returns (LoadGameNumByMatchCidRes) {}
+    rpc LoadItemStock (LoadItemStockReq) returns (LoadItemStockRes) {}
+    rpc ImportAdRoi (ImportAdRoiReq) returns (ImportAdRoiRes) {}
+    rpc LoadAdRoi (LoadAdRoiReq) returns (LoadAdRoiRes) {}
+    rpc LoadRobotWinLose (LoadRobotWinLoseReq) returns (LoadRobotWinLoseRes) {}
+}
+
+service OptGoods {
+    rpc LoadGoods (LoadGoodsReq) returns (LoadGoodsRes) {}
+    rpc EditGoods (EditGoodsReq) returns (EditGoodsRes) {}
+    rpc CreateGoods (CreateGoodsReq) returns (CreateGoodsRes) {}
+}
+
+service Manage {
+    rpc CreateManageRole (CreateManageRoleReq) returns (CreateManageRoleRes) {}
+    rpc DeleteManageRole (DeleteManageRoleReq) returns (DeleteManageRoleRes) {}
+    rpc EditManageRole (EditManageRoleReq) returns (EditManageRoleRes) {}
+    rpc LoadManageRole (LoadManageRoleReq) returns (LoadManageRoleRes) {}
+    rpc CreateManageUser (CreateManageUserReq) returns (CreateManageUserRes) {}
+    rpc DeleteManageUser (DeleteManageUserReq) returns (DeleteManageUserRes) {}
+    rpc EditManageUser (EditManageUserReq) returns (EditManageUserRes) {}
+    rpc LoadManageUser (LoadManageUserReq) returns (LoadManageUserRes) {}
+    rpc LoginManageUser (LoginManageUserReq) returns (LoginManageUserRes) {}
+}
+
+service Feedback {
+    rpc SendWeChatMsg (SendWeChatMsgReq) returns (SendWeChatMsgRes) {}
+    rpc GetFeedback (GetFeedbackReq) returns (GetFeedbackRes) {}
+    rpc GetFeedbackMedia (GetFeedbackMediaReq) returns (GetFeedbackMediaRes) {}
+    rpc SendScribeMsg (SendScribeMsgReq) returns (SendScribeMsgRes) {}
+}
+
+//客户端请求
+message LoadGameInfoReq {
+    string game_gid = 1;
+    int32  is_lobby = 2;//0: 否 1: 是
+}
+
+message LoadGameInfoRes {
+    string game_name = 1;
+    string game_icon = 2;
+    string promotion_info = 3;
+    string share_info = 4;
+}
+
+message LoadOnlineParamReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string game_pn = 3;
+}
+
+message LoadOnlineParamRes {
+    string code = 1;
+    string online_param = 2;
+}
+
+message CheckUpdateReq {
+    int32  plat_aid = 1;
+    string pn = 2;
+    string platform = 3;
+    string module_name = 4;
+}
+
+message CheckUpdateRes {
+    string code = 1;
+    string data = 2;
+}
+
+message LoadNoticeReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string pn = 3;
+}
+
+message LoadNoticeRes {
+    string code = 1;
+    string notice = 2;
+}
+
+//后台请求
+message GameStatsReq {
+    int32  start_date = 1;
+    int32  end_date = 2;
+    string game_gid = 3;
+    string game_pn = 4;
+    int32  is_aggregate = 5;//0:分项，1：聚合
+}
+message GameStatsRes {
+    string code = 1;
+    string game_stats = 2;
+}
+
+message LoadItemRankReq {
+    string game_gid = 1;
+    int32  item_id = 2;
+}
+message LoadItemRankRes {
+    string code = 1;
+    string item_rank = 2;
+}
+
+message LoadGameNumByMatchCidReq {
+    int32  start_date = 1;
+    int32  end_date = 2;
+    string game_gid = 3;
+    string game_pn = 4;
+    string match_cid = 5;
+}
+message LoadGameNumByMatchCidRes {
+    string code = 1;
+    string game_num_by_match_cid = 2;
+}
+
+message LoadItemStockReq {
+    int32 start_date = 1;
+    int32 end_date = 2;
+}
+message LoadItemStockRes {
+    string code = 1;
+    string item_stock = 2;
+}
+
+message ImportAdRoiReq {
+    string token = 1;
+    string session = 2;
+}
+
+message ImportAdRoiRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadAdRoiReq {
+    int32 start_date = 1;
+    int32 end_date = 2;
+    string product_id = 3;
+}
+
+message LoadAdRoiRes {
+    string code = 1;
+    string ad_roi = 2;
+}
+
+message LoadRobotWinLoseReq {
+    int32 start_date = 1;
+    int32 end_date = 2;
+    string game_gid = 3;
+    string match_cid = 4;
+}
+
+message LoadRobotWinLoseRes {
+    string code = 1;
+    string robot_win_lose = 2;
+}
+
+message LoadWinningRateRankReq {
+    string game_gid = 1;
+    string openid = 2;
+}
+
+message LoadWinningRateRankRes {
+    string code = 1;
+    string win_rate_rank = 2;
+}
+
+message LoadUserExchangeReq {
+    string uuid = 1;
+    string openid = 2;
+}
+
+message LoadUserExchangeRes {
+    string code = 1;
+    string user_exchange = 2;
+}
+
+message PlayerLogAnalyseReq {
+    string openid = 1;
+    int64  begin_time = 2;
+    int64  end_time = 3;
+}
+
+message PlayerLogAnalyseRes {
+    string code = 1;
+    string analyse = 2;
+}
+
+message MatchRankListReq {
+    string match_id = 1;
+}
+
+message MatchRankListRes {
+    string code = 1;
+    string match_rank_list = 2;
+}
+
+message LoadPromoteBindReq {
+    string game_gid = 1;
+    string game_pn = 2;
+    string openid = 3;
+    int64  begin_time = 4;
+    int64  end_time = 5;
+    int64  pageNow = 6;
+    int64  pageSize = 7;
+}
+
+message LoadPromoteBindRes {
+    string code = 1;
+    string promote_bind = 2;
+}
+
+message LoadPromoteUuidReq {
+    string uuid = 1;
+    int32  flag = 2;//0:亲传,1:再传
+}
+
+message LoadPromoteUuidRes {
+    string code = 1;
+    string promote_uuid = 2;
+}
+
+message LoadPayLogReq {
+    string game_gid = 1;
+    string game_pn = 2;
+    string openid = 3;
+    string order_no = 4; //订单号
+    string trade_no = 5; //支付订单号
+    int32  store_id = 6; //0:充值商城，1:积分商城
+    int32  order_status = 7; //0:支付成功，1:待支付
+    double min_price = 8;
+    double max_price = 9;
+    int64  begin_time = 10;
+    int64  end_time = 11;
+    int64  pageNow = 12;
+    int64  pageSize = 13;
+    string mch_id = 14; //支付商户号
+}
+
+message LoadPayLogRes {
+    string code = 1;
+    string pay_log = 2;
+}
+
+message CreateDeveloperReq {
+    string name = 1;
+    string desc = 2;
+    int32  type = 3;
+    string user_name = 4;
+    string password = 5;
+    string phone = 6;
+    string phone_code = 7;
+}
+
+message CreateDeveloperRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoginDeveloperReq {
+    string user_name = 1;
+    string password = 2;
+}
+
+message LoginDeveloperRes {
+    string name = 1;
+    string desc = 2;
+    int32  type = 3;
+    string user_name =4;
+    string phone = 5;
+    string token = 6;
+    string code = 7;
+    string msg = 8;
+}
+
+message UpdateDeveloperReq {
+    string name = 1;
+    string desc = 2;
+    int32  type = 3;
+    string user_name = 4;
+    string old_password = 5;
+    string new_password = 6;
+    string phone = 7;
+    string phone_code = 8;
+}
+
+message UpdateDeveloperRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message OperateGameReq {
+    string game_name = 1;
+    string game_pn = 2;
+    string game_icon = 3;
+    string game_desc = 4;
+    string promotion_info = 5;
+    string share_info = 6;
+    string game_gid = 7;
+}
+
+message OperateGameRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadGameReq {
+    string game_name = 1;
+    int64  pageNow = 2;
+    int64  pageSize = 3;
+}
+
+message LoadGameRes {
+    string code = 1;
+    string game_list = 2;
+}
+
+message OperateGameParamReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string game_pn = 3;
+    string game_param = 4;
+}
+
+message OperateGameParamRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadGameParamReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string game_pn = 3;
+    int64  pageNow = 4;
+    int64  pageSize = 5;
+}
+
+message LoadGameParamRes {
+    string code = 1;
+    string game_param_list = 2;
+}
+
+message OperateGameVersionReq {
+    int32  plat_aid = 1;
+    string pn = 2;
+    string platform = 3;
+    string module_name = 4;
+    string extparam = 5;
+    string url = 6;
+    string version_name = 7;
+    int32  version_code = 8;
+    int32  zip_size = 9;
+}
+
+message OperateGameVersionRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadGameVersionReq {
+    int32  plat_aid = 1;
+    string pn = 2;
+    string platform = 3;
+    int64  pageNow = 4;
+    int64  pageSize = 5;
+}
+
+message LoadGameVersionRes {
+    string code = 1;
+    string game_version_list = 2;
+}
+
+message LoadGameVersionLogReq {
+    int32  plat_aid = 1;
+    string pn = 2;
+    string module_name = 3;
+    string platform = 4;
+}
+
+message LoadGameVersionLogRes {
+    string code = 1;
+    string game_version_log_list = 2;
+}
+
+message OperateMatchDetailReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string match_cid = 3;
+    string name = 4;
+    string desc = 5;
+    int32  score_rule = 6;
+}
+
+message OperateMatchDetailRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadMatchDetailReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+}
+
+message LoadMatchDetailRes {
+    string code = 1;
+    string match_detail_list = 2;
+}
+
+message UserDetailReq {
+    string openid = 1;
+    string game_gid = 2;
+}
+
+message UserDetailRes {
+    string code = 1;
+    string msg = 2;
+    string result = 3;
+}
+
+message OperateUserReq {
+    string openid = 1;
+    string game_gid = 2;
+    int32  flag = 3;//0:删除账户,1:封禁账户,2:封禁游戏
+}
+
+message OperateUserRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message UserItemDataDetailReq {
+    string openid = 1;
+    string game_gid = 2;
+}
+
+message UserItemDataDetailRes {
+    string code = 1;
+    string msg = 2;
+    UserItemDataDetailResult result = 3;
+}
+
+message UserItemDataDetailResult {
+    string user_data = 1;
+    string game_data = 2;
+}
+
+message LoadPlayLogReq {
+    string game_gid = 1;
+    string openid = 2;
+    int64  begin_time = 3;
+    int64  end_time = 4;
+    int64  page_code = 5; //分页查询页码
+    int64  page_size = 6; //分页查询每页数量
+}
+
+message LoadPlayLogRes {
+    string code = 1;
+    string msg = 2;
+    LoadPlayLogResult result = 3;
+}
+
+message LoadPlayLogResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message LoadMatchLogReq {
+  string openid = 1;
+  string match_id = 2;
+}
+
+message LoadMatchLogRes {
+  string code = 1;
+  string match_log = 2;
+}
+
+message LoadMatchDataReq {
+    string match_id = 1;
+}
+
+message LoadMatchDataRes {
+    string code = 1;
+    string match_data = 2;
+}
+
+message UpdateUserItemDataDetailReq {
+    string openid = 1;
+    string game_gid = 2;
+    int32 item_id = 3;
+    int64 item_num = 4;
+}
+
+message UpdateUserItemDataDetailRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message CreateMatchRewardsTemplateReq {
+    string reward = 1;
+}
+
+message CreateMatchRewardsTemplateRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadMatchRewardsTemplateReq {
+    int32  id = 1;
+    int32  page_code = 2; //分页查询页码
+    int32  page_size = 3; //分页查询每页数量
+}
+
+message LoadMatchRewardsTemplateRes {
+    string code = 1;
+    string msg = 2;
+    LoadMatchRewardsTemplateResult result = 3;
+}
+
+message LoadMatchRewardsTemplateResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message UpdateMatchRewardsTemplateReq {
+    string reward = 1;
+}
+
+message UpdateMatchRewardsTemplateRes {
+    string code = 1;
+    string msg = 2;
+}
+message CreateMatchTemplateReq {
+    string match_template = 1;
+    string reward = 2;
+}
+
+message CreateMatchTemplateRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadMatchTemplateReq {
+    int32  typeid = 1;
+    int32  page_code = 2; //分页查询页码
+    int32  page_size = 3; //分页查询每页数量
+}
+
+message LoadMatchTemplateRes {
+    string code = 1;
+    string msg = 2;
+    LoadMatchTemplateResult result = 3;
+}
+
+message LoadMatchTemplateResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message UpdateMatchTemplateReq {
+    string match_template = 1;
+}
+
+message UpdateMatchTemplateRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadGameDataReq {
+}
+
+message LoadGameDataRes {
+    string code = 1;
+    string msg = 2;
+    LoadGameDataResult result = 3;
+}
+
+message LoadGameDataResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message AddMatchDetailReq {
+    string match_detail = 1;
+}
+
+message AddMatchDetailRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditMatchDetailReq {
+    string match_detail = 1;
+}
+
+message EditMatchDetailRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message SelectMatchDetailReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    int32  type_id = 3;
+    int32  page_code = 4; //分页查询页码
+    int32  page_size = 5; //分页查询每页数量
+}
+
+message SelectMatchDetailRes {
+    string code = 1;
+    string msg = 2;
+    SelectMatchDetailResult result = 3;
+}
+
+message SelectMatchDetailResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message LoadGoodsReq {
+    int32   product_id = 1;
+    string  product_name = 2;
+    int32   type_id = 3;
+    int32   category_id = 4;
+    int32   is_first = 5;
+    double   market_price_min = 6;
+    double   market_price_max = 7;
+    int32   page_code = 8; //分页查询页码
+    int32   page_size = 9; //分页查询每页数量
+}
+
+message LoadGoodsRes {
+    string code = 1;
+    string msg = 2;
+    LoadGoodsResult result = 3;
+}
+
+message LoadGoodsResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message EditGoodsReq {
+    string goods_info = 1;
+}
+
+message EditGoodsRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message CreateGoodsReq {
+    string goods_info = 1;
+}
+
+message CreateGoodsRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadBlhNoticeLogReq {
+    int32   type_id = 1;
+    int32   page_code = 2; //分页查询页码
+    int32   page_size = 3; //分页查询每页数量
+}
+
+message LoadBlhNoticeLogRes {
+    string code = 1;
+    string msg = 2;
+    LoadBlhNoticeLogResult result = 3;
+}
+
+message LoadBlhNoticeLogResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message LoadOrderLogReq {
+    int32   plat_aid = 1;
+    string  game_gid = 2;
+    string  openid = 3;
+    string  order_no = 4;
+    int32   order_state  = 5;
+    int32   product_id = 6;
+    string  goods_name  = 7;
+    string  pn = 8;
+    int64   begin_time = 9;
+    int64   end_time = 10;
+    int32   page_code = 11; //分页查询页码
+    int32   page_size = 12; //分页查询每页数量
+}
+
+message LoadOrderLogRes {
+    string code = 1;
+    string msg = 2;
+    LoadOrderLogResult result = 3;
+}
+
+message LoadOrderLogResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message DoOrderInfoLogReq {
+    string order_no = 1;
+    int32 order_state = 2;
+}
+
+message DoOrderInfoLogRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message CreateManageRoleReq {
+    string role_name = 1;
+    string permission_ids = 2;
+}
+
+message CreateManageRoleRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteManageRoleReq {
+    string role_id = 1;
+}
+
+message DeleteManageRoleRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditManageRoleReq {
+    string manage_role = 1;
+}
+
+message EditManageRoleRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadManageRoleReq {
+    string role_id = 1;
+    int32 page_code = 2;
+    int32 page_size = 3;
+}
+
+message LoadManageRoleRes {
+    string code = 1;
+    string msg = 2;
+    LoadManageRoleResult result = 3;
+}
+
+message LoadManageRoleResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message CreateManageUserReq {
+    string user_name = 1;
+    string password = 2;
+    string role_id = 3;
+    string game_gids = 4;
+    string plats = 5;
+    string pns = 6;
+}
+
+message CreateManageUserRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteManageUserReq {
+    string user_id = 1;
+}
+
+message DeleteManageUserRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditManageUserReq {
+    string manage_user = 1;
+}
+
+message EditManageUserRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadManageUserReq {
+    string user_id = 1;
+    string user_name = 2;
+    int32 page_code = 3;
+    int32 page_size = 4;
+}
+
+message LoadManageUserRes {
+    string code = 1;
+    string msg = 2;
+    LoadManageUserResult result = 3;
+}
+
+message LoadManageUserResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message LoginManageUserReq {
+    string user_name = 1;
+    string password = 2;
+}
+
+message LoginManageUserRes {
+    string code = 1;
+    string msg = 2;
+    LoginManageUserResult result = 3;
+}
+
+message LoginManageUserResult {
+    string user_id = 1;
+    string user_name = 2;
+    string user_token = 3;
+    string role_id = 4;
+    string role_name = 5;
+    string permission_ids = 6;
+    string game_gids = 7;
+    string plats = 8;
+    string pns = 9;
+}
+
+message CreatePlatConfigReq {
+    int32 id = 1;
+    string desc = 2;
+}
+
+message CreatePlatConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeletePlatConfigReq {
+    int32 id = 1;
+}
+
+message DeletePlatConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditPlatConfigReq {
+    string plat_config = 1;
+}
+
+message EditPlatConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadPlatConfigReq {
+    int32 page_code = 1;
+    int32 page_size = 2;
+}
+
+message LoadPlatConfigRes {
+    string code = 1;
+    string msg = 2;
+    LoadPlatConfigResult result = 3;
+}
+
+message LoadPlatConfigResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message OperateExchangeTplReq {
+    string exchange_tpl = 1;
+    string _id = 2;//传空新增
+    int32  flag = 3;//0:修改,1:删除
+}
+
+message OperateExchangeTplRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadExchangeTplReq {
+    int32 plat_aid = 1;
+}
+
+message LoadExchangeTplRes {
+    string code = 1;
+    string exchange_tpl_list = 2;
+}
+
+message OperateSignTplReq {
+    string sign_tpl = 1;
+    string _id = 2;//传空新增
+    int32  flag = 3;//0:修改,1:删除
+}
+
+message OperateSignTplRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadSignTplReq {
+    int32 plat_aid = 1;
+}
+
+message LoadSignTplRes {
+    string code = 1;
+    string sign_tpl_list = 2;
+}
+
+message ReadTaskConfigReq {
+    string task_config = 1;
+}
+
+message ReadTaskConfigRes {
+    string code = 1;
+    int32  rows = 2;
+}
+
+message LoadTaskConfigReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    int64  pageNow = 3;
+    int64  pageSize = 4;
+}
+
+message LoadTaskConfigRes {
+    string code = 1;
+    string task_config = 2;
+}
+
+message ReadLevelUpConfigReq {
+    string level_up_config = 1;
+}
+
+message ReadLevelUpConfigRes {
+    string code = 1;
+}
+
+message LoadLevelUpConfigReq {
+}
+
+message LoadLevelUpConfigRes {
+    string code = 1;
+    string level_up_config = 2;
+}
+
+message CreateHomeConfigReq {
+    string home_info = 1;
+}
+
+message CreateHomeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteHomeConfigReq {
+    int32 plat_aid = 1;
+}
+
+message DeleteHomeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditHomeConfigReq {
+    string home_info = 1;
+}
+
+message EditHomeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadHomeConfigReq {
+    int32 plat_aid = 1;
+    int32 page_code = 2;
+    int32 page_size = 3;
+}
+
+message LoadHomeConfigRes {
+    string code = 1;
+    string msg = 2;
+    LoadHomeConfigResult result = 3;
+}
+
+message LoadHomeConfigResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message CreateActivityConfigReq {
+    string activity_template = 1;
+}
+
+message CreateActivityConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteActivityConfigReq {
+    string id = 1;
+}
+
+message DeleteActivityConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditActivityConfigReq {
+    string activity_template = 1;
+}
+
+message EditActivityConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadActivityConfigReq {
+    int32 plat_aid = 1;
+    int32 page_code = 2;
+    int32 page_size = 3;
+}
+
+message LoadActivityConfigRes {
+    string code = 1;
+    string msg = 2;
+    LoadActivityConfigResult result = 3;
+}
+
+message LoadActivityConfigResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message CreateAdConfigReq {
+    string ad_config = 1;
+}
+
+message CreateAdConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteAdConfigReq {
+    string id = 1;
+}
+
+message DeleteAdConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditAdConfigReq {
+    string ad_config = 1;
+}
+
+message EditAdConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadAdConfigReq {
+    int32 plat_aid = 1;
+    string game_gid = 2;
+    string game_pn = 3;
+    int32 page_code = 4;
+    int32 page_size = 5;
+}
+
+message LoadAdConfigRes {
+    string code = 1;
+    string msg = 2;
+    LoadAdConfigResult result = 3;
+}
+
+message LoadAdConfigResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message CreateMatchLabelsReq {
+    string labels_desc = 1;
+    string labels_value = 2;
+}
+
+message CreateMatchLabelsRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteMatchLabelsReq {
+    string id = 1;
+}
+
+message DeleteMatchLabelsRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditMatchLabelsReq {
+    string match_labels = 1;
+}
+
+message EditMatchLabelsRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadMatchLabelsReq {
+    int32 page_code = 1;
+    int32 page_size = 2;
+}
+
+message LoadMatchLabelsRes {
+    string code = 1;
+    string msg = 2;
+    LoadMatchLabelsResult result = 3;
+}
+
+message LoadMatchLabelsResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message ReadRawConfigReq {
+    string raw_config = 1;
+}
+
+message ReadRawConfigRes {
+    string code = 1;
+    int32  rows = 2;
+}
+
+message CreateNoticeConfigReq {
+    string notice_config = 1;
+}
+
+message CreateNoticeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message DeleteNoticeConfigReq {
+    string id = 1;
+}
+
+message DeleteNoticeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditNoticeConfigReq {
+    string notice_config = 1;
+}
+
+message EditNoticeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadNoticeConfigReq {
+    int32 plat_aid = 1;
+    string game_gid = 2;
+    int32 type = 3;
+    int64 begin_time = 4;
+    int64 end_time = 5;
+    int32 page_code = 6;
+    int32 page_size = 7;
+}
+
+message LoadNoticeConfigRes {
+    string code = 1;
+    string msg = 2;
+    LoadNoticeConfigResult result = 3;
+}
+
+message LoadNoticeConfigResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message LoadMessagesInfoReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string openid = 3;
+    int64  begin_time = 4;
+    int64  end_time = 5;
+    int64  pageNow = 6;
+    int64  pageSize = 7;
+}
+
+message LoadMessagesInfoRes {
+    string code = 1;
+    string msg = 2;
+    string messages = 3;
+}
+
+message SendMessageReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string openid = 3;
+    string title = 4;
+    string image = 5;
+    string message = 6;
+}
+
+message SendMessageRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadReportsReq {
+    string game_gid = 1;
+    string openid = 2;
+    int32  type = 3;
+    int64  begin_time = 4;
+    int64  end_time = 5;
+    int64  pageNow = 6;
+    int64  pageSize = 7;
+}
+
+message LoadReportsRes {
+    string code = 1;
+    string msg = 2;
+    string reports = 3;
+}
+
+message ReplyProblemReq {
+    string report_gid = 1;
+    string game_gid = 2;
+    string openid = 3;
+    string issue = 4;
+}
+
+message ReplyProblemRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message OperateAppConfigReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    string game_pn = 3;
+    string app_name = 4;
+}
+
+message OperateAppConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadAppConfigReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+    int64  pageNow = 3;
+    int64  pageSize = 4;
+}
+
+message LoadAppConfigRes {
+    string code = 1;
+    string app_config = 2;
+}
+
+message LoadExchangeLogReq {
+    int32   plat_aid = 1;
+    string  game_gid = 2;
+    string  openid = 3;
+    string  pn = 4;
+    int64   begin_time = 5;
+    int64   end_time = 6;
+    int32   page_code = 7; //分页查询页码
+    int32   page_size = 8; //分页查询每页数量
+}
+
+message LoadExchangeLogRes {
+    string code = 1;
+    string msg = 2;
+    LoadExchangeLogResult result = 3;
+}
+
+message LoadExchangeLogResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message OperateExchangeLogReq {
+    string _id = 1;
+    int32  flag = 2;////0:审核中,1:已发放,2:已拒绝
+}
+
+message OperateExchangeLogRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadErrorDefinitionReq {
+}
+
+message LoadErrorDefinitionRes {
+    string code = 1;
+    string msg = 2;
+    LoadErrorDefinitionResult result = 3;
+}
+
+message LoadErrorDefinitionResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message LoadErrorDescReq {
+    string  err_srv = 1;
+    string  err_id = 2;
+    int32   page_code = 3;
+    int32   page_size = 4;
+}
+
+message LoadErrorDescRes {
+    string code = 1;
+    string msg = 2;
+    LoadErrorDescResult result = 3;
+}
+
+message LoadErrorDescResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message CreateErrorDescReq {
+    string error_desc = 1;
+}
+
+message CreateErrorDescRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message EditErrorDescReq {
+    string error_desc = 1;
+}
+
+message EditErrorDescRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message PurgeCndCacheReq {
+    string urls = 1;
+    string paths = 2;
+    int32  flag = 3;//download：0，gameFile：1
+    int32  type = 4;//tencent：0，aliyun: 1
+}
+
+message PurgeCndCacheRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadPurgeHistoryReq {
+    string start_time = 1;
+    string end_time = 2;
+    int32  flag = 3;
+    int32  type = 4;
+}
+
+message LoadPurgeHistoryRes {
+    string code = 1;
+    string purge_history = 2;
+}
+
+message OperateItemConfigReq {
+    int32  item_id = 1;
+    string name = 2;
+    string desc = 3;
+    string icon = 4;
+}
+
+message OperateItemConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadItemConfigReq {
+}
+
+message LoadItemConfigRes {
+    string code = 1;
+    string item_config = 2;
+}
+
+message OperateExCodeConfigReq {
+    string ex_config = 1;
+    string _id = 2;//传空新增
+    int32  flag = 3;//0:修改,1:删除
+}
+
+message OperateExCodeConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadExCodeConfigReq {
+    int32  plat_aid = 1;
+    string ex_gid = 2;
+    int64  pageNow = 3;
+    int64  pageSize = 4;
+}
+
+message LoadExCodeConfigRes {
+    string code = 1;
+    string ex_config = 2;
+}
+
+message LoadExCodeReq {
+    int32  plat_aid = 1;
+    string ex_gid = 2;
+}
+
+message LoadExCodeRes {
+    string code = 1;
+    string ex_code = 2;
+}
+
+message LoadExCodeLogReq {
+    int32  plat_aid = 1;
+    string ex_gid = 2;
+    string ex_code = 3;
+    string openid = 4;
+    int64  begin_time = 5;
+    int64  end_time = 6;
+    int64  pageNow = 7;
+    int64  pageSize = 8;
+}
+
+message LoadExCodeLogRes {
+    string code = 1;
+    string ex_code_log = 2;
+}
+
+message OperateMailConfigReq {
+    string title = 1;
+    string content = 2;
+    int32  sender = 3;//0:公告类，1:领取类
+    int32  type = 4;//0:全部玩家，1:部分玩家，2:部分亲友圈
+    string receiver = 5;//接收对象及奖励
+    int64  time = 6;
+    string _id = 7;
+    int32  flag = 8;
+}
+
+message OperateMailConfigRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadMailConfigReq {
+    int32  sender = 1;
+    int32  type = 2;
+    string receiver = 3;
+    int32  state = 4;//0:已发送，1：待发送
+    int64  begin_time = 7;
+    int64  end_time = 8;
+    int64  pageNow = 9;
+    int64  pageSize = 10;
+}
+
+message LoadMailConfigRes {
+    string code = 1;
+    string mail_config = 2;
+}
+
+message SendWeChatMsgReq {
+    string pn = 1;
+    string to_user = 2;//微信openid
+    string msg_type = 3;//消息类型：text、image、link、miniprogrampage
+    string msg = 4;
+}
+
+message SendWeChatMsgRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message GetFeedbackReq {
+    string pn = 1;
+    int32 page = 2;
+    int32 num = 3;
+}
+
+message GetFeedbackRes {
+    string code = 1;
+    string feedback = 2;
+}
+
+message GetFeedbackMediaReq {
+    string pn = 1;
+    int32  record_id = 2;
+    string media_id = 3;
+}
+
+message GetFeedbackMediaRes {
+    string code = 1;
+    string media = 2;
+}
+
+message SendScribeMsgReq {
+}
+
+message SendScribeMsgRes {
+}
+
+message RefreshCacheReq {
+    int32 plat_aid = 1;
+}
+
+message RefreshCacheRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadPlatReq {
+}
+
+message LoadPlatRes {
+    string code = 1;
+    string plat_list = 2;
+}
+
+message LoadAppReq {
+    int32  plat_aid = 1;
+    string game_gid = 2;
+}
+
+message LoadAppRes {
+    string code = 1;
+    string app_list = 2;
+}
+
+
+message LoadWithdrawalOrderReq {
+    int32   plat_aid = 1;
+    string  game_gid = 2;
+    string  openid = 3;
+    string  pn = 4;
+    int64   begin_time = 5;
+    int64   end_time = 6;
+    int32   page_code = 7; //分页查询页码
+    int32   page_size = 8; //分页查询每页数量
+}
+
+message LoadWithdrawalOrderRes {
+    string code = 1;
+    string msg = 2;
+    LoadWithdrawalOrderResult result = 3;
+}
+
+message LoadWithdrawalOrderResult {
+    int32 total = 1;
+    string result = 2;
+}
+
+message OperateWithdrawalOrderReq {
+    string _id = 1;
+    int32  flag = 2;////0: 成功，1:审核中,2:已拒绝,3:处理中，4:异常
+}
+
+message OperateWithdrawalOrderRes {
+    string code = 1;
+    string msg = 2;
+}

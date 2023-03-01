@@ -1,0 +1,64 @@
+syntax = "proto3";
+package proto;
+
+service Ad {
+  rpc LoadAdConfig(LoadAdConfigReq) returns (LoadAdConfigRsp) {}
+  //创建广告订单
+  rpc CreateAdOrder(CreateAdOrderReq) returns (CreateAdOrderRsp) {}
+  //完成广告订单
+  rpc CompleteAdOrder(CompleteAdOrderReq) returns (CompleteAdOrderRsp) {}
+}
+
+message LoadAdConfigReq {
+  int32  is_pn = 1;
+}
+
+message LoadAdConfigRsp {
+  string ad_config = 1;
+  string msg = 2;
+}
+
+message CreateAdOrderReq {
+  int32  ad_aid = 1;
+  string ad_param = 2;
+  int32  is_pn = 3;
+  int64  reg_time = 4;
+  int32  game_num = 5;
+  int64  coin = 6;
+}
+
+message CreateAdOrderRsp {
+  string code = 1;
+  string msg = 2;
+  string order_no = 3;
+}
+
+message CompleteAdOrderReq {
+  string order_no = 1;
+}
+
+message CompleteAdOrderRsp {
+  string code = 1;
+  string msg = 2;
+  string award_list = 3;
+}
+
+message AdNotifyStateReq {
+  string ad_param = 1;
+}
+
+message AdNotifyStateRsp {
+  string code = 1;
+  string award_list = 2;
+}
+
+message CompleteAdNot {
+  string openid = 1;
+  string game_gid = 2;
+  int32  ad_aid = 3;
+  string ad_order_id = 4;
+  int64 create_time = 5;
+  int64 complete_time = 6;
+  repeated string labels = 7;
+  int32 plat_aid = 8;
+}

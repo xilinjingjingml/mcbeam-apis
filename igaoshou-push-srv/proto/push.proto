@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+
+package push;
+option go_package = "./proto;push";
+
+service Push {
+  // 注册到 push server
+  rpc Register(RegisterReq) returns (Empty) {}
+  rpc Heartbeat(Ping)returns (Pong) {}
+
+  // 邀请好友
+  rpc PushMessage(PushMessageReq) returns (PushMessageRsp) {}
+}
+
+service PushRpc {
+  // 获取在线人数
+  rpc GetOnlineNum(GetOnlineNumReq) returns (GetOnlineNumRsp) {}
+
+  // 发送消息到客户端
+  rpc Push(PushReq) returns (PushRsp) {}
+}
+
+message Empty {
+
+}
+
+message Ping {
+  int64 now = 1; // 客户端发送时间
+  string openid = 2;
+}
+
+message Pong {
+  int64 now = 1; // 客户端发送时间
+  int64 send = 2; // 服务端发送时间
+}
+
+message RegisterReq {
+  string openid = 1;
+  string token = 2;
+  int64 cli_ver = 3; // 客户端版本
+}
+
+message RegisterRsp {
+  string err = 1;
+}
+
+message PushReq {
+  string openid = 1;
+  string route = 2;
+  bytes body = 3;
+}
+
+message PushRsp {
+}
+
+
+// 服务推送消息
+message SendPushMsg {
+  enum PushType {
+    Broadcast = 0;
+    Notify = 1;
+  }
+  string game_gid = 1;
+  PushType type = 2;
+  string openid = 3;
+  int32 show_type = 4; // 显示类型: 0.广播 1.游戏内通知
+  string open_uri = 5; // 打开指定的功能  /match/{match_id}
+  string msg = 6; // 消息内容
+
+  bool resend = 10;
+}
+
+
+// 客户端收到的推送消息
+message MsgPushNot {
+  int32 show_type = 1; // 显示类型: 0.广播 1.游戏内通知 2.好友游戏邀请
+  string open_uri = 2; // 打开指定的功能  /match/{match_id}
+  string msg = 3; // 消息内容
+  string sender = 4; // 发送者
+}
+
+message SystemMessage {
+  int32 code = 1;
+  string err = 2;
+  string request = 3;
+}
+
+message GetOnlineNumReq {
+  repeated string game_list = 1;
+}
+
+message GetOnlineNumRsp {
+  map<string, int32> online_num_list = 1;
+}
+
+message Session {
+  string type = 1;
+  bytes body = 2;
+  int64 ts = 3;
+}
+
+message PushMessageReq {
+  string openid = 1;
+  string message = 2;
+  int32 show_type = 3; // 显示类型: 0.广播 1.游戏内通知 2.好友游戏邀请
+}
+
+message PushMessageRsp {
+  string  err = 1;
+}

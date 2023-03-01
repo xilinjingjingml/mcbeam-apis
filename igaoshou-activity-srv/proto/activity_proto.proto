@@ -1,0 +1,511 @@
+syntax = "proto3";
+
+package activity;
+
+/*
+1-登录奖励
+2-免费领取银币
+3-免费银币
+4-免费抽奖
+5-玩比赛得奖品
+6-免费金币
+7-玩游戏得钻石
+8-每日签到
+9-破产补助
+10-每日免费金币
+11-客服会话领金币
+12-秋季丰收礼
+13-免输卡
+14-免费转盘累计奖励
+15-免费转盘累计奖励
+16-免费转盘累计奖励
+17-免费转盘累计奖励
+18-免费转盘累计奖励
+19-免费转盘累计奖励
+20-免费转盘累计奖励
+1001-绑定微信
+1002-完成新手引导
+1003-结算广告点-获得更多奖励
+1004-结算广告点-获得更多银币
+1005-兑换银币
+1006-兑换金币
+1007-返还报名费
+1008-赢分加倍
+1009-打满6局奖励
+1010-免费对战赛
+1011-下局免输
+1012-收藏有礼
+1013-免费转盘
+1014-高级转盘
+1015-王者转盘
+1016-至尊转盘
+1017 //免费找回损失
+1018 //付费找回损失
+1019 //赢币暴击
+1020-每日首胜礼包
+1021-双倍卡领取奖励
+1022-红中开局卡
+1023-3张超级加倍卡
+1024-记牌器和加倍卡混合礼包
+1025-每3局奖励
+1026-炸弹开局
+1027-炸弹开局
+1101-新手礼包(红包赛)
+1102-每日礼包(红包赛)
+1103-免费红包(红包赛)
+1104-免费抽奖(红包赛)
+1105-幸运福利(红包赛)
+1106-输分找回(红包赛)
+1107-赢分加倍(红包赛)
+1108-下局免输(红包赛)
+1109-免扣符(红包赛)
+
+2001-新手7天礼包
+*/
+
+service Activity {
+  rpc GetActivityConfig(GetActivityConfigReq) returns (GetActivityConfigRsp) {}
+  rpc GetReward(GetRewardReq) returns (GetRewardRsp) {}
+  rpc GetDelayReward(GetDelayRewardReq) returns (GetDelayRewardRsp) {}
+  //完成广告订单
+  rpc AdNotifyState(AdNotifyStateReq) returns (AdNotifyStateRsp) {}
+
+  rpc CopyActivityConfig(CopyActivityConfigReq) returns (CopyActivityConfigRsp) {}
+
+  // 猜大小
+  rpc PokerCrap(PokerCrapReq) returns(PokerCrapRsp) {}
+
+  rpc GetShopPayResult(GetShopPayResultReq) returns(GetShopPayResultRsp) {}
+  rpc GetRoundAwards(GetRoundAwardsReq) returns(GetRoundAwardsRsp) {}
+}
+
+service Sign {
+  rpc GetSignConfig(GetSignConfigReq) returns (GetSignConfigRsp) {}
+  rpc GetSignReward(GetSignRewardReq) returns (GetSignRewardRsp) {}
+
+  //按月签到
+  rpc GetMonthSignConfig(GetMonthSignConfigReq) returns (GetMonthSignConfigRsp) {}
+  rpc GetMonthSignReward(GetMonthSignRewardReq) returns (GetMonthSignRewardRsp) {}
+}
+
+//摇金币
+service RolledCoins {
+  rpc GetRolledCoinsConfig(GetRolledCoinsConfigReq) returns (GetRolledCoinsConfigRsp) {}
+  rpc GetRolledCoinsReward(GetRolledCoinsRewardReq) returns (GetRolledCoinsRewardRsp) {}
+  rpc RolledCoinsPayResult(RolledCoinsPayResultReq) returns (Empty) {}
+}
+
+message Empty{}
+
+message AwardItem{
+  //@inject_tag: bson:"item_id"
+  int32 item_id = 1;      //道具id  0：v币 1：奖券 2：钻石
+  //@inject_tag: bson:"item_num"
+  int32 item_num = 2;      //道具数量
+}
+
+message RewardItem{
+  int32 item_id = 1;      //道具id
+  int32 min_num = 2;      //道具最少数量
+  int32 max_num = 3;      //道具最大数量
+  int32 multiple_min_num = 4;      //道具多倍奖励最少数量
+  int32 multiple_max_num = 5;      //道具多倍奖励最大数量
+}
+
+message Weight{
+  repeated RewardItem rewards = 1;
+  int32 weight = 2;    //权重
+  repeated AwardItem user_item = 3;     // 开始
+}
+
+message ActivityConfig{
+  message FixWeight {
+    int32 times = 1;
+    int32 start_times = 2;
+    int32 end_times = 3;
+    repeated Weight weight = 4;
+    int32 every_time = 5;
+  }
+  int32 activity_id = 1;   //1000以下为商城界面活动
+  string name = 2;
+  string desc = 3;
+  int32 icon_type = 4;
+  int32 interval_time = 5;
+  int32 novice_days = 6;
+  int32 day_times = 7;
+  int32 ad_aid = 8;    //对应的广告点
+  repeated Weight weight = 9; // 随机奖励配置
+  repeated Weight novice_weight = 10;// 新手奖励配置
+  repeated FixWeight fix_weight = 11;// 固定次数奖励配置
+  string param = 12;
+
+  int32 receive_time = 13;   //领取时间
+  int32 receive_num = 14;   //当日领取次数
+  int32 receive_days = 15;   //总领取天数
+  int32 total_receive_num = 16;   //总领取次数
+
+  AwardItem cost_item = 17; // 消耗
+  repeated AwardItem awards = 18; // 奖励
+
+  string player_data = 19;
+  int32 interval_seconds = 20;
+}
+
+message GetActivityConfigReq{
+  int32 activity_id = 1;
+  string match_id = 2;
+  int64 version = 3;
+  int32 round_count = 4;
+}
+
+message GetActivityConfigRsp{
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated ActivityConfig configs = 3;
+  string err = 4;
+  string debug = 5;
+}
+
+message GetRewardReq{
+  int32 activity_id = 1;
+  int32 delay_award = 2;
+  int32 stage = 3;
+  int32 multiple = 4;   //领取多倍奖励
+  string player_data = 5;
+}
+
+message GetRewardRsp{
+  int32 err_code = 1;
+  string err_msg = 2;
+  int32 reward_index = 3;
+  repeated AwardItem award_item = 4;
+  string err = 5;
+}
+
+message GetDelayRewardReq{
+  int32 activity_id = 1;
+  string player_data = 2;
+  int32 multiple = 3;   //领取多倍奖励
+}
+
+message GetDelayRewardRsp{
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated AwardItem award_item = 3;
+  string err = 4;
+}
+
+message CopyActivityConfigReq{
+  int32 plat_aid = 1;
+  int32 to_plat_aid = 2;
+}
+
+message CopyActivityConfigRsp{
+  int32 err_code = 1;
+  string err_msg = 2;
+}
+
+message PokerCrapReq {
+  int32 activity_id = 1;
+  int32 guess = 2; // 押注
+}
+
+message PokerCrapRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated AwardItem award_item = 3; // 当前可获得奖励
+  int32 cur_times = 4;  // 当前次数
+  int32 max_times = 5; // 最大次数
+  int32 result = 6; // 结果
+  string err = 7;
+}
+
+message GetShopPayResultReq{
+  string box_gid = 1;
+}
+
+message GetShopPayResultRsp{
+  string err = 1;
+  repeated AwardItem award_item = 2;
+}
+
+message GetRoundAwardsReq{
+  
+}
+
+message GetRoundAwardsRsp{
+  string err = 1;
+  repeated AwardItem awards = 2;
+}
+
+message AdNotifyStateReq {
+  string ad_param = 1;
+}
+
+message AdNotifyStateRsp {
+  string code = 1;
+  string award_list = 2;
+}
+
+message GetSignConfigReq {
+}
+
+message SignRewardItem {
+  //@inject_tag: bson:"item_id"
+  int32 item_id = 1;
+  //@inject_tag: bson:"item_num"
+  int32 item_num = 2;
+  //@inject_tag: bson:"multiple_num"
+  int32 multiple_num = 3;
+}
+
+message SignDayConfig {
+  //@inject_tag: bson:"day_index"
+  int32 day_index = 1;
+  //@inject_tag: bson:"novice_reward_list"
+  repeated SignRewardItem novice_reward_list = 2;
+  //@inject_tag: bson:"reward_list"
+  repeated SignRewardItem reward_list = 3;
+}
+
+message SignConfig {
+  //@inject_tag: bson:"novice_times"
+  int32 novice_times = 1;
+  //@inject_tag: bson:"ad_aid"
+  int32 ad_aid = 2;
+  //@inject_tag: bson:"list"
+  repeated SignDayConfig list = 3;
+  int32 DayIndex = 4;
+  int32 Receive = 5;
+  int32 Novice = 6;
+}
+
+message GetSignConfigRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+  SignConfig config = 3;
+  string err = 4;
+}
+
+message GetSignRewardReq{
+  int32 day_index = 1;
+  int32 double_reward = 2;
+}
+
+message GetSignRewardRsp{
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated AwardItem award_item = 3;
+  string err = 4;
+}
+
+message GetMonthSignConfigReq{
+
+}
+
+message MonthSignDayConfig {
+  //@inject_tag: bson:"day_index"
+  int32 day_index = 1;
+  //@inject_tag: bson:"novice_reward_list"
+  repeated SignRewardItem novice_reward_list = 2;
+  //@inject_tag: bson:"reward_list"
+  repeated SignRewardItem reward_list = 3;
+  int32 receive = 4;     //是否领取
+}
+
+message MonthSignConfig{
+  //@inject_tag: bson:"ad_aid"
+  int32 ad_aid = 1;
+  //@inject_tag: bson:"list"
+  repeated MonthSignDayConfig list = 2;
+  //@inject_tag: bson:"month_list"
+  repeated MonthSignDayConfig month_list = 3;   //月累计签到奖励
+  int32 today_week = 4;
+  int32 total_times = 5;    //总领取次数
+  int32 total_month_times = 6;   //当月领取次数
+}
+
+message GetMonthSignConfigRsp{
+  string err = 1;
+  MonthSignConfig config = 2;
+}
+
+message GetMonthSignRewardReq{
+  int32 repair = 1;  //1 补签
+  int32 multiple = 2; //多倍领取
+
+}
+
+message GetMonthSignRewardRsp{
+  string err = 1;
+  repeated AwardItem award_item = 2;
+}
+
+//摇金币
+message GetRolledCoinsConfigReq {
+}
+
+message RolledCoinsConfig {
+  message BoxWeight {
+    //@inject_tag: bson:"box_id"
+    int32 box_id  = 1;
+    //@inject_tag: bson:"weight"
+    int32 weight = 2;
+    //@inject_tag: bson:"desc"
+    string desc = 3;
+  }
+  message BoxGroup {
+    //@inject_tag: bson:"index"
+    int32 index = 1;
+    //@inject_tag: bson:"rewards"
+    repeated AwardItem rewards = 2;
+  }
+  //@inject_tag: bson:"day_times"
+  int32 day_times = 1;
+  //@inject_tag: bson:"day_max_times"
+  int32 day_max_times = 2;
+  //@inject_tag: bson:"weight"
+  repeated BoxWeight weight = 3;
+  //@inject_tag: bson:"name"
+  string name = 4;
+  //@inject_tag: bson:"group"
+  repeated BoxGroup group = 5;
+  //@inject_tag: bson:"no_pay_demotion"
+  int32 no_pay_demotion = 6;
+
+  int32 receive_num = 7;   //当日领取次数
+}
+
+message GetRolledCoinsConfigRsp {
+  string err = 1;
+  RolledCoinsConfig config = 2;
+}
+
+message GetRolledCoinsRewardReq {
+
+}
+
+message GetRolledCoinsRewardRsp {
+  string err = 1;
+  int32 box_id = 2;
+  int32 group_index = 3;
+  repeated AwardItem rewards = 4;
+}
+
+message RolledCoinsPayResultReq {
+  bool is_pay = 1;
+}
+
+// 活动状态变更通知
+message ActivityStatusNot {
+  enum Status  {
+    Underway = 0; // 进行中
+    Completed = 1; // 已完成
+  }
+  enum Type {
+    Sign = 0; // 签到
+    Activity = 2; // 活动
+  }
+  int32 activity_id = 1; // 活动ID
+  Status status = 2; // 当前状态
+  string  openid = 3; // 玩家ID
+  string game_gid = 4; // 游戏ID
+  int32 plat_aid = 5; // 平台ID
+  Type type = 6; // 活动类型
+  int64 update_time = 7; // 更新时间
+  map<string, string> metadata = 8; // 相关参数
+}
+
+enum ActivityType {
+  Normal = 0; // 通用
+  Turntable = 1; // 转盘
+  SignIn = 2; // 签到
+  Broke = 3; // 低保
+  RecoverLosses = 4; // 输分找回
+  WinCrit = 5; // 赢分暴击
+}
+
+// 闯关赛
+service Tollgate {
+  rpc GetTollgateConfig(GetTollgateConfigReq) returns (GetTollgateConfigRsp) {}
+  rpc CrossGate(CrossGateReq) returns (CrossGateRsp) {}
+  rpc GetLvAwards(GetLvAwardsReq) returns (GetLvAwardsRsp) {}
+  rpc GetTollgateRank(GetTollgateRankReq) returns (GetTollgateRankRsp) {}
+}
+
+message TollgateCfg {
+  int32 lv = 1;
+  string name = 2;
+  string icon = 3;
+  int32 start = 4;
+  int32 end = 5;
+  repeated AwardItem gate_award = 6;
+  repeated AwardItem lv_award = 7;
+}
+
+message GetTollgateConfigReq {
+}
+
+message GetTollgateConfigRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+  int32 cur_gate = 3;
+  repeated TollgateCfg config = 4;
+  string err = 5;
+}
+
+message CrossGateReq {
+  int32 new_gate = 1;
+}
+
+message CrossGateRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated AwardItem gate_award = 3;
+  string err = 4;
+}
+
+message CrossGateNot {
+  string openid = 1;
+  string game_gid = 2;
+  int32 plat_aid = 3;
+  int32 gate = 4;
+  int64 update_time = 5;
+}
+
+message GetLvAwardsReq {
+  int32 new_lv = 1;
+  int32 is_double = 2;
+}
+
+message GetLvAwardsRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated AwardItem lv_award = 3;
+  string err = 4;
+}
+
+message TollgateRank {
+  int32 rank = 1;
+  int32 last_rank = 2;
+  string openid = 3;
+  string nickname = 4;
+  string head_image = 5;
+  int32 gate = 6;
+}
+
+message GetTollgateRankReq {
+  int32 page_size = 1;
+  int32 page_idx = 2;
+}
+
+message GetTollgateRankRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+  int32 page_idx = 3;
+  TollgateRank self = 4;
+  repeated TollgateRank ranks = 5;
+  int64 rank_num = 6;
+  string err = 7;
+}
+

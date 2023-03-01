@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package mahjong;
+option go_package = "./;mahjong";
+
+service Table {
+  // 准备
+  rpc Ready(ReadyReq) returns (Empty) {}
+  // 开始游戏
+  rpc StartGame(StartGameReq) returns(Empty) {}
+}
+
+message Empty{}
+
+// 准备
+message ReadyReq {
+  bool is_ready = 1;
+}
+
+message ReadyRsp {
+  string err = 1;
+}
+
+message ReadyNot {
+  string uid = 1;
+  bool is_ready = 2;
+}
+
+// 回合开始广播
+message RoundStartNot {
+  string round_id = 1;
+  int32 cur_round = 2; // 当前局数
+  int64 start_time = 3; // 开始时间
+}
+
+// 回合结束广播
+message RoundEndNot {
+  string round_id = 1;
+  int32 cur_round = 2; // 当前局数
+  int64 end_time = 3; // 结束时间
+}
+
+message EnterRoomNot {
+  string room_id = 1;
+  string uid = 2;
+  string nickname = 3;
+  int64 money = 4;
+  int32 type = 5; // 0 player 1 robot
+  int32 chair_id = 6;
+}
+
+
+//// 回合状态
+//message EventRoundStatusNot {
+//  enum Type {
+//    ROUND_STARTED = 0; // 回合开始事件
+//    ROUND_END = 1; // 回合结束事件
+//    ROUND_RESTARTED = 2; // 重新开局
+//  }
+//  string game_id = 1;
+//  string rule_id = 2;
+//  string room_id = 3;
+//  string server_id = 4;
+//  string round_id = 5; // 回合标志
+//  int32 round_num = 6; // 当前回合数
+//  Type type = 7;
+//}
+
+/////////////////////////////
+// 事件通知
+/////////////////////////////
+
+// 回合结算通知
+message RoundSettleNot {
+  message PlayerData {
+    string openid = 1;
+    string nickname = 2;
+    int64  cur_win_lost = 3; // 本局输赢
+    int64 total_win_lost = 4; // 总输赢
+  }
+  int32 index = 1; // 当前回合数
+  string game_gid = 2;
+  string server_id = 3;
+  string match_cid = 4; // 场次ID
+  string match_id = 5; // 场次实例ID
+  string room_id = 6; // 房间ID
+  string round_id = 7; // 回合标志
+  string rules = 8; // 游戏规则 gs_properties
+  int64 finished_time = 9; // 结算时间
+  int32 settle_item = 10;
+  int32 plat_aid = 11;
+  repeated PlayerData player_list = 12; // 玩家列表
+  repeated string winners = 13; // 本局赢家列表
+}
+
+message KickOutReq {
+  string openid = 1;
+}
+
+
+message KickOutRsp {
+  string err = 1;
+}
+
+message StartGameReq {
+
+}
+message StartGameRsp {
+  string err = 1;
+}

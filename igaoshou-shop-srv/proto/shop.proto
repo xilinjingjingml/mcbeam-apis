@@ -1,0 +1,644 @@
+syntax="proto3";
+package proto;
+option go_package = "./proto;proto";
+
+//充值商城
+service Box {
+    rpc BoxList(BoxListReq) returns (BoxListRsp) {}//充值宝箱列表
+    rpc BoxInfo(BoxInfoReq) returns (BoxInfoRsp) {}
+    rpc SendItem(PayNotifyReq) returns (PayNotifyRes) {}
+    rpc GetVipItem(GetVipItemReq) returns (GetVipItemRes) {}
+}
+
+//积分商城
+service Goods {
+    rpc HomeInfo(HomeInfoReq) returns (HomeInfoRsp) {}//首页展示
+    rpc CategoryGoods(CategoryGoodsReq) returns (CategoryGoodsRsp) {}//分类商品列表(包括商品检索)
+    rpc GoodsDetail(GoodsDetailReq) returns (GoodsDetailRsp) {}//商品详情
+    rpc CartList(CartListReq) returns (CartListRsp) {}//购物车列表
+    rpc CartAdd(CartAddReq) returns (CartListRsp) {}//添加购物车
+    rpc CartDelete(CartDeleteReq) returns (CartListRsp) {}//删除购物车
+    rpc CheckCart(CheckCartReq) returns (CartListRsp) {}//检查购物车
+    rpc RearrangeOrder(RearrangeOrderReq) returns (RearrangeOrderRsp) {}//重整订单
+    rpc SubmitOrder(SubmitOrderReq) returns (SubmitOrderRsp) {}//提交订单
+    rpc OrderList(OrderListReq) returns (OrderListRsp) {}
+    rpc OrderDetail(OrderDetailReq) returns (OrderDetailRsp) {}//订单详情
+    rpc RefreshGoods(RefreshGoodsReq) returns (RefreshGoodsRsp) {}//获取商品
+    rpc SubmitOrderBlh(PayNotifyReq) returns (PayNotifyRes) {}
+    rpc GetOrderStatusInfoBlh(GetOrderInfoBlhReq) returns (GetOrderInfoBlhRsp) {}
+    rpc GetOrderShipmentBlh(GetOrderShipmentBlhReq) returns (GetOrderShipmentBlhRsp) {}
+    rpc ConfirmOrder(ConfirmOrderReq) returns (ConfirmOrderRsp) {}
+}
+
+//兑换
+service Exchange {
+    rpc ExchangeTemplateInfo(ExchangeTemplateInfoReq) returns (ExchangeTemplateInfoRsp) {}
+    rpc ExchangeInfo(ExchangeInfoReq) returns (ExchangeInfoRsp) {}
+    rpc ExchangeLogList(ExchangeLogListReq) returns (ExchangeLogListRsp) {}
+    rpc SendRedPacket(SendRedPacketReq) returns (SendRedPacketRsp) {}
+    rpc CodeAward(CodeAwardReq) returns (CodeAwardRes) {}
+    rpc OutGold(OutGoldReq) returns (OutGoldRes) {}
+    rpc LoadInOutGoldLog(LoadInOutGoldLogReq) returns (LoadInOutGoldLogRes) {}
+    rpc VipOutGoldNotify(VipOutGoldNotifyReq) returns (VipOutGoldNotifyRsp) {}
+    rpc SendOutGold(SendOutGoldReq) returns (SendOutGoldRsp) {}
+}
+
+message PayNotifyReq {
+    string openid = 1;
+    string game_gid = 2;
+    int32  store_id = 3;
+    string goods_param = 4;
+    int32  total_amount = 5;
+}
+
+message PayNotifyRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message BoxListReq {
+    int32 plat_aid = 1;//平台id
+}
+
+message BoxListRsp {
+    string   code = 1;
+    repeated BoxInfo box_list = 2; //宝箱列表
+    string   vip_card = 3; //会员卡信息
+    int32    first_buy = 4; //首充状态
+    int32    limit_buy = 5; //限充状态
+}
+
+message BoxInfoReq {
+    string box_gid = 1;
+}
+
+message BoxInfoRsp {
+    BoxInfo box_info = 1;
+}
+
+message BoxInfo {
+    //@inject_tag: bson:"plat_aid"
+    int32   plat_aid = 1;//平台id
+    //@inject_tag: bson:"box_gid"
+    string  box_gid = 2;//宝箱id
+    //@inject_tag: bson:"box_type"
+    int32   box_type = 3;//宝箱类型
+    //@inject_tag: bson:"name"
+    string  name = 4; //宝箱名称
+    //@inject_tag: bson:"price"
+    int32   price = 5;//宝箱价格
+    //@inject_tag: bson:"image"
+    string  image = 6;//宝箱图片
+    //@inject_tag: bson:"box_item"
+    repeated ItemInfo box_item = 7;//内含道具
+    //@inject_tag: bson:"days_num"
+    int32   days_num = 8;
+    //@inject_tag: bson:"card_id"
+    int32   card_id = 9;//周卡ID
+    //@inject_tag: bson:"days_item"
+    repeated ItemInfo days_item = 10;//每日道具
+    //@inject_tag: bson:"is_buy"
+    int32   is_buy = 11;//是否购买
+    //@inject_tag: bson:"func"
+    string  func = 12;//功能
+}
+
+message GetVipItemReq {
+    int32 card_id = 1;
+}
+
+message GetVipItemRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message ItemInfo {
+    //@inject_tag: bson:"item_id"
+    int32 item_id = 1;
+    //@inject_tag: bson:"item_num"
+    int64 item_num = 2;
+    //@inject_tag: bson:"item_name"
+    string item_name = 3;
+}
+
+message HomeInfoReq {
+    int32  page_code = 1; //分页查询页码
+    int32  page_size = 2; //分页查询每页数量
+    string  sort_by = 3; //排序字段
+    int32  order_code = 4; //顺序 -1降序 1升序
+}
+
+message HomeInfoRsp {
+    string code = 1;
+    //@inject_tag: bson:"ads"
+    string ads = 2;//广告轮播图链接，","分隔
+    //@inject_tag: bson:"type_list"
+    repeated TypeList type_list = 3;//商品类型
+    //@inject_tag: bson:"category_list"
+    repeated CategoryList category_list = 4;//商品类别
+    repeated GoodsInfo first_goods = 5;//首页精选商品列表
+}
+
+message TypeList {
+    //@inject_tag: bson:"type_id"
+    int32  type_id = 1;//类型id
+    //@inject_tag: bson:"type_name"
+    string type_name = 2;//类型名称
+    //@inject_tag: bson:"type_images"
+    string type_images = 3;//类型图标
+}
+
+message CategoryList {
+    //@inject_tag: bson:"category_id"
+    int32  category_id = 1;//类别id
+    //@inject_tag: bson:"category_name"
+    string category_name = 2;//类别名称
+    //@inject_tag: bson:"category_images"
+    string category_images = 3;//类别图标
+    //@inject_tag: bson:"goods_count"
+    int32 goods_count = 4;//展示商品数量
+}
+
+message CategoryGoodsReq {
+    int32  type_id = 1; //商品类型(0自营1卡券2直充3京东4严选)
+    int32  category_id = 2; //分类id
+    string keyword = 3; //查询关键字
+    int32  page_code = 4; //分页查询页码
+    int32  page_size = 5; //分页查询每页数量
+    string  sort_by = 6; //排序字段
+    int32  order_code = 7; //顺序 -1降序 1升序
+}
+
+message CategoryGoodsRsp {
+    string   code = 1;     //返回码
+    repeated GoodsInfo goods_list = 2; //商品列表
+}
+
+//（state 上架状态1：上架，0：下架，isFirst 首页展示状态 1: 展示，0：不展示）
+message GoodsInfo {
+    //@inject_tag: bson:"goods_gid"
+    string goods_gid = 1;   //我方商品id
+    //@inject_tag: bson:"product_id"
+    int32  product_id = 2; //第三方商品id
+    //@inject_tag: bson:"product_name"
+    string product_name = 4; //商品名称
+    //@inject_tag: bson:"product_desc"
+    string product_desc = 5; //商品描述
+    //@inject_tag: bson:"pris"
+    repeated PriceMix pris = 6; //价格组合
+    //@inject_tag: bson:"update_time"
+    string update_time = 7; //更新时间
+    //@inject_tag: bson:"product_images"
+    string product_images = 8; //商品首图链接
+    //@inject_tag: bson:"tag_images"
+    string tag_images = 9; //商品角标链接
+}
+
+message GoodsDetailReq {
+    string goods_gid = 1;
+    string pris_gid = 2;
+}
+
+message GoodsDetailRsp {
+    //@inject_tag: bson:"product_id"
+    int32  product_id = 1; //第三方商品id
+    //@inject_tag: bson:"product_name"
+    string product_name = 2; //商品名称
+    //@inject_tag: bson:"product_desc"
+    string product_desc = 3; //商品描述
+    //@inject_tag: bson:"color_name"
+    string color_name = 4; //颜色描述
+    //@inject_tag: bson:"specifications"
+    string specifications = 5; //商品参数
+    //@inject_tag: bson:"pris"
+    repeated PriceMix pris = 6; //价格组合
+    //@inject_tag: bson:"product_images"
+    string product_images = 7; //商品首图链接
+    //@inject_tag: bson:"images"
+    string images = 8; //商品图片链接，多张","隔开
+    //@inject_tag: bson:"product_infos"
+    string product_infos = 9; //图文详情（PC）
+    //@inject_tag: bson:"app_introduce"
+    string app_introduce = 10; //图文详情（WAP）
+    //@inject_tag: bson:"type_id"
+    int32  type_id = 11; //商品类型(0自营1卡券2直充3京东4严选)
+    //@inject_tag: bson:"goods_gid"
+    string goods_gid = 12;   //我方商品id
+}
+
+message PriceMix {
+    //@inject_tag: bson:"pris_gid"
+    string pris_gid = 1;
+    //@inject_tag: bson:"ticketz"
+    int32  ticketz = 2;//赠送奖券
+    //@inject_tag: bson:"score"
+    int32  score = 3;//赠送游戏积分
+    //@inject_tag: bson:"pri"
+    repeated Payment pri = 4;
+    //@inject_tag: bson:"vip_pri"
+    repeated Payment vip_pri = 5;
+}
+
+message Payment {
+    //@inject_tag: bson:"pri_gid"
+    string  pri_gid = 1; //代币id
+    //@inject_tag: bson:"pri_type"
+    int32  pri_type = 2; //代币类型
+    //@inject_tag: bson:"pri_value"
+    int32  pri_value = 3; //代币数量
+    //@inject_tag: bson:"pri_currency"
+    string  pri_currency = 4;//币种
+}
+
+message CartListReq {
+}
+
+message CartAddReq {
+    string goods_gid = 1;
+    int32  goods_num = 2;
+    string pris_gid = 3;//价格组合id
+}
+
+message CartDeleteReq {
+    string cart_gid = 1;//购物车id
+}
+
+message CheckCartReq {
+    string cart_gid = 1;
+    int32  checked = 2;
+    int32  goods_num = 3;
+}
+
+message CartListRsp {
+    string   code = 1;
+    repeated CartInfo cart_list = 2;//购物车信息
+    SettleInfo settle_info = 3;//结算
+}
+
+message CartInfo {
+    //@inject_tag: bson:"cart_gid"
+    string cart_gid = 1;
+    //@inject_tag: bson:"goods_gid"
+    string goods_gid = 2;
+    //@inject_tag: bson:"goods_name"
+    string goods_name = 3;
+    //@inject_tag: bson:"goods_num"
+    int32  goods_num = 4;
+    //@inject_tag: bson:"goods_images"
+    string goods_images = 5; //商品首图链接
+    int32  checked = 6;
+    //@inject_tag: bson:"add_pris"
+    PriceMix add_pris = 7;//加购时价格组合
+    PriceMix pris = 8;//商品价格组合
+    //@inject_tag: bson:"type_id"
+    int32  type_id = 9;
+    //@inject_tag: bson:"product_id"
+    int32  product_id = 10;
+}
+
+message SettleInfo {
+    int32 ticketz_total = 1;
+    int32 score_total = 2;
+    repeated Payment origin_total = 3;//订单总价
+    repeated Payment discount_total = 4;//优惠总价
+    repeated Payment total = 5;//结算总价
+}
+
+//goods_gid goods_num pris_gid立即购买场景时传
+message RearrangeOrderReq {
+    string goods_gid = 1;
+    int32  goods_num = 2;
+    string pris_gid = 3;
+    string address_gid = 4;
+}
+
+message RearrangeOrderRsp {
+    string   code = 1;
+    repeated CartInfo cart_list = 2;//购物车信息
+    SettleInfo settle_info = 3;//结算
+    string   address = 4;
+}
+
+//goods_gid goods_num pris_gid立即购买场景时传 tel虚拟商品时传
+message SubmitOrderReq {
+    string goods_gid = 1;
+    int32  goods_num = 2;
+    string pris_gid = 3;
+    string address_gid = 4;
+    string tel = 5;
+    string card_no = 6;//类加油卡卡号
+}
+
+message SubmitOrderRsp {
+    string code = 1;
+    string msg = 2;
+    string order_no = 3;
+}
+
+message OrderListReq {
+    int32  order_state = 1;
+}
+
+message OrderListRsp {
+    string code = 1;
+    string order_list = 2;
+}
+
+message OrderDetailReq {
+    string order_no = 1;
+}
+
+message OrderDetailRsp {
+    string code = 1;
+    string order_no = 2;
+    int32  order_state = 3;
+    int64  order_time = 4;
+    int64  end_time = 5;
+    int32  ticketz_state = 6;//赠送奖券发放状态
+    int32  score_state = 7;//赠送积分发放状态
+    PriceMix pris = 8;//订单价格
+    repeated CartInfo goods_list = 9;//订单商品
+    PriceMix origin_pris = 10;//原始价格
+    string address = 11;
+}
+
+message RefreshGoodsReq {
+    string name = 1;
+    string password = 2;
+}
+
+message RefreshGoodsRsp {
+    string code = 1;
+    string msg = 2;
+}
+
+message SubmitOrderBlhReq {
+    string orderNo = 1;
+}
+
+message SubmitOrderBlhRsp {
+    string code = 1;
+    string msg = 2;
+}
+
+message GetOrderInfoBlhReq {
+    string orderNo = 1;
+}
+
+message GetOrderInfoBlhRsp {
+    string code = 1;
+    string msg = 2;
+    int32 status = 3;
+}
+
+message GetOrderShipmentBlhReq {
+    string orderNo = 1;
+}
+
+message GetOrderShipmentBlhRsp {
+    string code = 1;
+    string msg = 2;
+    string data = 3;
+}
+
+message ConfirmOrderReq {
+    string orderNo = 1;
+    int32 state = 2;
+}
+
+message ConfirmOrderRsp {
+    string code = 1;
+    string msg = 2;
+}
+
+message CompleteItemNot {
+    string openid = 1;
+    int32  plat_aid = 2;
+    string game_gid = 3;
+    string box_param = 4;
+    repeated ItemInfo itemInfo = 5;
+    int64  complete_time = 6;
+    int32  total_amount = 7;
+    BoxInfo boxInfo = 8;
+}
+
+message Notice {
+    double notice_id = 1;
+    double type = 2;
+    Result result = 3;
+    string time = 4;
+}
+
+message Result {
+    string itemId = 1;
+    double state = 2;
+    double sell_price = 3;
+    double settle_price = 4;
+    string order_sn = 5;
+    string number = 6;
+    string express_name = 7;
+    double express_code = 8;
+    string code = 9;
+    string cid = 10;
+    string deadline = 11;
+}
+
+message ExchangeTemplateInfoReq {
+    int32 typeId = 1;
+}
+
+message ExchangeTemplateInfoRsp {
+    string code = 1;
+    string msg = 2;
+    repeated ExchangeTemplate result = 3;
+}
+
+message ExchangeTemplate {
+    //@inject_tag: bson:"_id"
+    string id = 1;
+    //@inject_tag: bson:"plat_aid"
+    int32 plat_aid = 2;
+    //@inject_tag: bson:"exchange_img"
+    string exchange_img = 3;
+    //@inject_tag: bson:"consume_list"
+    repeated ItemInfo consume_list = 4;
+    //@inject_tag: bson:"output_list"
+    repeated ItemInfo output_list = 5;
+    //@inject_tag: bson:"type_id"
+    int32 type_id = 6;
+    //@inject_tag: bson:"daily_limit"
+    int32 daily_limit = 7;
+    //@inject_tag: bson:"total_limit"
+    int32 total_limit = 8;
+    //@inject_tag: bson:"inventory_num"
+    int32 inventory_num = 9;
+    //@inject_tag: bson:"exchange_conditions"
+    string exchange_conditions = 10;
+}
+
+message ExchangeInfoReq {
+    string id = 1;
+    string appid = 2;
+    string openid = 3;
+    string device_id = 4;
+    string device_type = 5;
+    string address = 6;
+    string ly_uid = 7;
+}
+
+message ExchangeInfoRsp {
+    string code = 1;
+    string msg = 2;
+}
+
+message SendRedPacketReq {
+    string wx_appid = 1;
+    string wx_openid = 2;
+    int64  money = 3;
+    string device_id = 4;
+    string device_type = 5;
+    string address = 6;
+}
+
+message SendRedPacketRsp {
+    string code = 1;
+    string msg = 2;
+}
+
+message ExchangeLogListReq {
+    int32  page_code = 1; //分页查询页码
+    int32  page_size = 2; //分页查询每页数量
+}
+
+message ExchangeLogListRsp {
+    string code = 1;
+    string msg = 2;
+    repeated ExchangeLog result = 3;
+}
+
+message ExchangeLog {
+    //@inject_tag: bson:"uuid"
+    string uuid = 1;
+    //@inject_tag: bson:"plat_aid"
+    int32 plat_aid = 2;
+    //@inject_tag: bson:"template_id"
+    string template_id = 3;
+    //@inject_tag: bson:"consume_list"
+    repeated ItemInfo consume_list = 4;
+    //@inject_tag: bson:"output_list"
+    repeated ItemInfo output_list = 5;
+    //@inject_tag: bson:"time"
+    int64 time = 6;
+    //@inject_tag: bson:"state"
+    int32 state = 7;
+}
+
+message CodeAwardReq {
+    string ex_code = 1;
+}
+
+message CodeAwardRes {
+    string code = 1;
+    string msg = 2;
+    repeated ItemInfo ex_award = 3;
+}
+
+message OutGoldReq {
+    int32 type = 1;//0:红包，1:GMGG
+    int64 num = 2;
+    string ly_uid = 3;
+    string token_name = 4;
+    string device_id = 5;
+    string device_type = 6;
+    string address = 7;
+    string metadata = 8;
+}
+
+message OutGoldRes {
+    string code = 1;
+    string msg = 2;
+}
+
+message LoadInOutGoldLogReq {
+    int64 pageNow = 1;
+    int64 pageSize = 2;
+}
+
+message LoadInOutGoldLogRes {
+    string code = 1;
+    repeated InOutGoldLog inOutGoldLog = 2;
+}
+
+message ExCodeConfig {
+    //@inject_tag: bson:"plat_aid"
+    int32 plat_aid = 1;
+    //@inject_tag: bson:"ex_gid"
+    string ex_gid = 2;
+    //@inject_tag: bson:"ex_name"
+    string ex_name = 3;
+    //@inject_tag: bson:"ex_num"
+    int32  ex_num = 4;
+    //@inject_tag: bson:"ex_type"
+    int32  ex_type = 5;
+    //@inject_tag: bson:"ex_start"
+    int64  ex_start = 6;
+    //@inject_tag: bson:"ex_end"
+    int64  ex_end = 7;
+    //@inject_tag: bson:"ex_award"
+    repeated ItemInfo ex_award = 8;
+}
+
+message InOutGoldLog {
+    //@inject_tag: bson:"uuid"
+    string uuid = 1;
+    //@inject_tag: bson:"order_no"
+    string order_no = 2;
+    //@inject_tag: bson:"token_name"
+    string token_name = 3;
+    //@inject_tag: bson:"token_num"
+    int64 token_num = 4;
+    //@inject_tag: bson:"time"
+    int64 time = 5;
+    //@inject_tag: bson:"status"
+    int32 status = 6;   // 0: 成功，1:审核中,2:已拒绝,3:处理中，4:异常
+    //@inject_tag: bson:"tradeNo"
+    string tradeNo = 7;
+    //@inject_tag: bson:"openid"
+    string openid = 8;
+    //@inject_tag: bson:"gameGid"
+    string gameGid = 9;
+    //@inject_tag: bson:"pn"
+    string pn = 10;
+    //@inject_tag: bson:"metadata"
+    string metadata = 11;
+    //@inject_tag: bson:"notifyUrl"
+    string notifyUrl = 12;
+    //@inject_tag: bson:"platAid"
+    string platAid = 13;
+}
+
+message VipOutGoldNotifyReq {
+    int64 amount = 1;
+    string currency = 2;
+    string orderNo = 3;
+    string ext = 4;
+    string tradeNo = 5;
+    string reason = 6;
+    int32 code = 7;
+    string userId = 8;
+    string data = 9;
+}
+
+message VipOutGoldNotifyRsp {
+    string msg = 1;
+}
+
+message SendOutGoldReq {
+    string uuid = 1;
+    string orderNo = 2;
+}
+
+message SendOutGoldRsp {
+    string code = 1;
+    string msg = 2;
+}

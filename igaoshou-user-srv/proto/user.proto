@@ -1,0 +1,384 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./proto;user";
+
+
+service UserRPC {
+  // 获取账号数据
+  rpc GetUserData(GetUserDataReq) returns (GetUserDataRsp) {}
+  // 获取玩家基础信息
+  rpc GetGameDataWithUUid(GetGameDataWithUUidReq) returns (GetGameDataWithUUidRsp) {}
+  // 获取玩家游戏数据
+  rpc GetUserGameData(GetUserGameDataReq) returns (GetUserGameDataRsp) {}
+  // 更新道具 （多个道具时，要么全部成功，要么全部失败）
+  rpc UpdateItem(UpdateItemReq) returns (UpdateItemRsp) {}
+  //  获取道具数据量
+  rpc GetItem(GetItemReq) returns (GetItemRsp) {}
+  // 更新账号
+  rpc UpdateUserData(UpdateUserDataReq) returns (UpdateUserDataRsp) {}
+  // 道具配置
+  rpc GetItemConfig(GetItemConfigReq) returns (GetItemConfigRsp) {}
+  // 随机返回一个机器人信息
+  rpc GetRandRobot(GetRandRobotReq) returns (GetRandRobotRsp) {}
+  // 获取玩家游戏列表
+  rpc GetPlyGameList(GetPlyGameListReq) returns (GetPlyGameListRsp){}
+  // 游戏币转换为点券
+  rpc Coin2Ticket(Coin2TicketReq) returns (Coin2TicketRsp) {}
+
+  // 批量获取玩家头像昵称
+  rpc BatchToObtainPlyBrief(BatchToObtainPlyBriefReq) returns (BatchToObtainPlyBriefRsp) {}
+  rpc BatchToObtainPlyBriefByUuid(BatchToObtainPlyBriefByUuidReq) returns (BatchToObtainPlyBriefByUuidRsp) {}
+
+  // 更新位置信息
+  rpc UpdateLocation(UpdateLocationReq) returns(UpdateLocationRsp) {}
+  // 玩家登陆游戏
+  rpc GameLogin(GameLoginReq) returns (GameLoginRsp) {}
+
+  // 查下输赢
+  rpc GetWinLoseWithDaily(GetWinLoseWithDailyReq) returns (GetWinLoseWithDailyRsp){}
+}
+message Item {
+  enum Type {
+    Platform = 0; // 平台道具
+    Game = 1; // 游戏道具
+  }
+  int32 id = 1;  // 道具ID
+  int64 num = 2; // 道具数量
+  Type type = 3; // 0平台道具 1游戏道具
+  int64 expire_at = 4; // 过期时间
+}
+
+message GetWinLoseWithDailyReq{
+  string reason = 1;
+  string  openid = 2;
+  string game_gid = 3;
+  int32 plat_aid = 4;
+  int32 item_id = 5;
+}
+
+message GetWinLoseWithDailyRsp{
+  string err = 1;
+  int64 win_lose = 2;
+}
+
+
+message GetUserDataReq {
+  string openid = 1;
+  string game_gid = 2;
+}
+
+message GetUserDataRsp {
+  string uuid = 1; // 平台账号
+  int32 level = 2; // 平台level
+  int32 exp = 3; // 平台 exp
+  int32 game_level = 4;
+  int32 game_exp = 5;
+  int64 reg_time = 6; // 注册时间
+  string area_info = 7; // 区域信息
+  string err = 8;
+  int64 game_reg_time = 9; // 游戏注册时间
+  string headimage = 10;
+  string nickname = 11;
+  string pn = 12;
+  int32 plat_aid = 13;
+  PlayerFlag flag = 14;
+}
+
+message GetUserGameDataReq {
+  string openid = 1;
+  string game_id = 2;
+}
+
+message GameLoginReq {
+  message UserInfo {
+    string uuid = 1;
+    string nickname = 2;
+    string headimgurl = 3;
+    int32  sex = 4;
+    string area_info = 5;
+    string phone = 6;
+    string email = 7;
+    string reg_pn = 8;
+    int32 reg_plat = 9;
+    map<string, string> metadata = 10;
+  }
+  string token = 1;
+  string area_info = 2;
+  UserInfo user_info = 3; // 更新时，提供该参数
+  string uuid = 4;
+}
+
+message GameLoginRsp {
+  string uuid = 1; // 平台账号
+  string game_id = 2; // 游戏ID
+  string openid = 3; // 游戏账号
+  string area_info = 4; // 所在区域
+  int32 plat_level = 5; // 平台level
+  int32 plat_exp = 6; // 平台 exp
+  //  int64 diamond = 7; // 现金
+  //  int64 ticket_z = 8; // ticket z
+  int32 level = 9; // 游戏等级
+  int32 exp = 10; // 游戏经验值
+  //  int64 score = 11; // 游戏积分
+  int64 reg_time = 12; // 注册时间
+  int64 join_time = 13; // 第一次加入游戏时间(当前游戏)
+  repeated Item item_list = 14; // 道具列表
+  int32 sex = 15; // 性别
+  string nickname = 16; // 昵称
+  string head_image = 17; // 头像
+  string phone = 18;
+  string email = 19;
+  string err = 20;
+  int32 max_exp = 21;
+  int32 max_plat_exp = 22;
+  map<string, string> metadata = 23;
+  bool newbie = 24; // 新玩家标记
+  uint64 uid = 25; // 玩家数字ID
+}
+
+// 玩家标记
+enum PlayerFlag {
+  Normal = 0; // 普通玩家
+  Robot = 1; // robot
+}
+
+
+
+message GetUserGameDataRsp {
+  string uuid = 1; // 平台账号
+  string game_id = 2; // 游戏ID
+  string openid = 3; // 游戏账号
+  string area_info = 4; // 所在区域
+  int32 plat_level = 5; // 平台level
+  int32 plat_exp = 6; // 平台 exp
+  //  int64 diamond = 7; // 现金
+  //  int64 ticket_z = 8; // ticket z
+  int32 level = 9; // 游戏等级
+  int32 exp = 10; // 游戏经验值
+  //  int64 score = 11; // 游戏积分
+  int64 reg_time = 12; // 注册时间
+  int64 join_time = 13; // 第一次加入游戏时间(当前游戏)
+  repeated Item item_list = 14; // 道具列表
+  int32 sex = 15; // 性别
+  string nickname = 16; // 昵称
+  string head_image = 17; // 头像
+  string phone = 18;
+  string email = 19;
+  string err = 20;
+  int32 max_exp = 21;
+  int32 max_plat_exp = 22;
+  string pn = 23; // 当前pn
+  int32 plat_aid = 24; // 创建账号时平台ID
+  PlayerFlag flag = 25;
+  uint64 uid = 26; // 玩家数字ID
+}
+
+message UpdateItemReq {
+  string openid = 1;
+  string game_id = 2;
+  string reason = 3;
+  map<string, string> tags = 4;
+  repeated Item item_list = 5;
+}
+
+message UpdateItemRsp {
+  string err = 1;
+}
+
+message UpdateItemNot {
+  string reason = 1; // 操作原因
+  repeated Item change_list = 5; // 变更列表
+  repeated Item item_list = 6; // 道具列表
+  map<string, string> tags = 7; // 操作相关上下文参数
+}
+
+
+message GetItemReq {
+  string openid = 1;
+  string game_id = 2;
+  repeated int32 items = 3;
+}
+
+message GetItemRsp {
+  repeated Item item_list = 1;
+  string err = 2;
+}
+
+message UpdateUserDataReq{
+  string uuid = 1;
+  string nickname = 2;
+  string headimgurl = 3;
+  int32  sex = 4;
+  string area_info = 5;
+  bool   new_user = 6; //新玩家标记false
+  string pn = 7;
+  string phone = 8;
+  string email = 9;
+  string game_id = 10;
+  string openid = 11;
+  int32 plat_aid = 12;
+}
+
+message UpdateUserDataRsp {
+  string err = 1;
+}
+
+message ItemConfig {
+  int32 id = 1;
+  string name = 2;
+  string desc = 3;
+  string icon = 4;
+}
+
+message GetItemConfigReq {
+
+}
+
+message GetItemConfigRsp {
+  repeated ItemConfig items = 1;
+  string err = 2;
+}
+
+message GetRandRobotReq {
+  string game_id = 1;
+  int32 plat_aid = 2;
+  int32 robot_num = 3;
+  repeated string exclude_list = 4;
+}
+
+message GetRandRobotRsp {
+  message RobotInfo {
+    string uuid = 1;
+    string openid = 2;
+  }
+
+  string uuid = 1;
+  string openid = 2;
+  string game_id = 3;
+  int32 plat_aid = 4;
+  string err = 5;
+  repeated RobotInfo robotList = 6;
+}
+
+message GetPlyGameListReq {
+  string openid = 1;
+  string game_id = 2;
+}
+
+message GetPlyGameListRsp {
+  message GameData {
+    string game_id = 1;
+    int32 level = 2;
+    int32 exp = 3;
+    int32 max_exp = 4;
+    string openid = 5;
+  }
+  repeated GameData list = 1;
+  int32 plat_level = 2;
+  int32 plat_exp = 3;
+  int32 max_plat_exp = 4;
+  string err = 5;
+}
+
+message Coin2TicketReq {
+  string openid = 1;
+  string game_gid = 2;
+}
+
+message Coin2TicketRsp {
+  int64 coin = 1;
+  int64 ticket = 2; // 最新ticket数量
+  int64 convert = 3;
+  string err = 4;
+}
+
+message PlayerBrief {
+  string openid = 1;
+  string uuid = 2;
+  string headImage = 3;
+  string nickname = 4;
+  int32 sex = 5;
+  string area_info = 6;
+  repeated Item props = 7; // 玩家展示道具
+}
+
+message BatchToObtainPlyBriefReq {
+  repeated string openid_list = 1;
+}
+
+message BatchToObtainPlyBriefRsp {
+  map<string, PlayerBrief> brief_map = 1;
+  string err = 2;
+}
+
+message BatchToObtainPlyBriefByUuidReq {
+  repeated string  uuid_list = 1;
+  string game_gid = 2;
+}
+
+message BatchToObtainPlyBriefByUuidRsp {
+  map<string, PlayerBrief> brief_map = 1;
+  string err = 2;
+}
+
+message UpdateLocationReq {
+  string openid = 1;
+  string uuid = 2;
+  string location = 3;
+}
+
+message UpdateLocationRsp {
+  string err = 1;
+}
+
+///////////////////////////////////
+// 以下为服务之间的协议
+
+// 道具变更通知
+//  broker  topic: user.item.change
+message UserItemChangeNot {
+  int32 plat_aid = 1;
+  string openid = 2;
+  string uuid = 3;
+  string game_id = 4;
+  string reason = 5;
+  repeated Item item_list = 6;
+  map<string, string> tags = 7;
+  repeated Item change_list = 8;
+  int64 update_time = 9;
+}
+
+message GetGameDataWithUUidReq {
+  string uuid = 1;
+  string game_gid = 2;
+}
+
+message GetGameDataWithUUidRsp {
+  string uuid = 1; // 平台账号
+  string game_id = 2; // 游戏ID
+  string openid = 3; // 游戏账号
+  string area_info = 4; // 所在区域
+  int32 plat_level = 5; // 平台level
+  int32 plat_exp = 6; // 平台 exp
+  //  int64 diamond = 7; // 现金
+  //  int64 ticket_z = 8; // ticket z
+  int32 level = 9; // 游戏等级
+  int32 exp = 10; // 游戏经验值
+  //  int64 score = 11; // 游戏积分
+  int64 reg_time = 12; // 注册时间
+  int64 join_time = 13; // 第一次加入游戏时间(当前游戏)
+  repeated Item item_list = 14; // 道具列表
+  int32 sex = 15; // 性别
+  string nickname = 16; // 昵称
+  string head_image = 17; // 头像
+  string phone = 18;
+  string email = 19;
+  string err = 20;
+  int32 max_exp = 21;
+  int32 max_plat_exp = 22;
+  string pn = 23; // 当前pn
+  int32 plat_aid = 24; // 创建账号时平台ID
+  PlayerFlag flag = 25;
+}

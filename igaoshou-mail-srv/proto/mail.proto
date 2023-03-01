@@ -1,0 +1,44 @@
+syntax = "proto3";
+package proto;
+
+service Mail {
+  rpc SendMail(SendMailReq) returns (SendMailRsp) {}
+  rpc OperateMail(OperateMailReq) returns (OperateMailRsp) {}
+  rpc LoadMailList(LoadMailListReq) returns (LoadMailListRsp) {}
+}
+
+message SendMailReq {
+  string title = 1;
+  string content = 2;
+  int32  sender = 3;//0:公告类，1:领取类
+  string receiver = 4;//接收对象及奖励
+}
+
+message SendMailRsp {
+  string code = 1;
+  string msg = 2;
+}
+
+message OperateMailReq {
+  string mail_gid = 1;
+  int32  sender = 2;
+  int32  flag = 3;//1:已读，2:领奖，3:删除
+}
+
+message OperateMailRsp {
+  string code = 1;
+  string msg = 2;
+}
+
+message LoadMailListReq {
+}
+
+message LoadMailListRsp {
+  string code = 1;
+  string msg = 2;
+  string mail_list = 3;
+}
+
+message MailNotify {
+  int32 new_mail = 1;
+}

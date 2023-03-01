@@ -1,0 +1,134 @@
+syntax = "proto3";
+package task;
+
+
+option go_package = "proto;task";
+
+
+
+service Task {
+  // 拉取进行中的任务列表
+  rpc GetTaskList(GetTaskListReq) returns(GetTaskListRsp) {}
+  // 获取任务奖励
+  rpc GetAward(GetAwardReq) returns(GetAwardRsp) {}
+  // 获取当前任务组的下一个任务
+  rpc GetNextTask(GetNextTaskReq) returns(GetNextTaskRsp) {}
+
+
+  // 获取宝箱任务奖励
+  rpc GetBoxTaskAward(GetAwardReq) returns(GetAwardRsp) {}
+  // 拉取宝箱任务
+  rpc GetBoxTaskList(GetTaskListReq) returns(GetTaskListRsp) {}
+  // 更新宝箱任务
+  rpc RefreshBoxTaskList(GetTaskListReq) returns (GetTaskListRsp) {}
+
+  // 更新任务进度
+  rpc UpdateTaskStatus(UpdateTaskStatusReq) returns (UpdateTaskStatusRsp) {}
+}
+
+enum AwardType {
+  Default = 0; // 普通
+  Ad = 1; // 看广告
+}
+
+message GetAwardReq {
+  string task_id = 1;
+  AwardType type = 2;
+  string params = 3;
+}
+
+message GetAwardRsp {
+  string err = 1;
+  repeated Item award_list = 2; // 任务奖励
+  AwardType type = 3;
+}
+
+message GetTaskDataReq {
+  string task_id = 1;
+}
+
+message GetTaskDataRsp {
+  string err = 1;
+  TaskData task_data = 2;
+}
+
+message GetTaskListReq {
+  int64 version = 1;
+  bool platform = 2;
+}
+
+message GetTaskListRsp {
+  string err = 1;
+  repeated TaskData list = 2;
+}
+
+message Prob  {
+  int32 Min = 1;
+  int32 Max = 2 ;
+  int32 Weight = 3;
+}
+message ItemBox  {
+  int32 Id = 1;
+  repeated Prob prob = 2;
+}
+
+message Item {
+  int32 id = 1;
+  int64 num = 2;
+}
+
+
+message TaskData {
+  string task_id = 1;
+  int32 type = 2; // 任务类型
+  int64 progress = 3; // 当前进度值
+  int32 status = 4; // 任务状态 0未完成 1奖励未领取 2已完成
+  string desc = 5; // 任务描述
+  int64 max_progress = 6; // 最大进度值
+  repeated Item award_list = 7; // 任务奖励
+  string task_tid = 8;
+  int32 group_id = 9;
+  string icon = 10;
+  string client_param = 11; // 客户端参数
+  bool hide = 12; // 是否隐藏
+  repeated ItemBox box_list = 13; // 宝箱列表
+  string name = 14;
+  string ext_param = 15; // 扩展参数
+  string cond_param = 16;
+  int32 cond_type = 17;
+  int32 order = 18;
+  int64 expire_at = 19;
+  string game_gid = 20;
+}
+
+message GetNextTaskReq {
+  int32 group_id = 1;
+}
+
+message GetNextTaskRsp {
+  string err = 1;
+  TaskData data = 2;
+  int32 max = 3;
+  int32 cur = 4;
+}
+
+// 任务完成
+message TaskCompletedNot {
+  string task_cid = 1;
+  int32 task_type = 2;
+  int32 plat_aid = 3;
+  string openid = 4;
+  string game_gid = 6;
+  int64 completed_time = 7;
+  string param = 8;
+}
+
+message UpdateTaskStatusReq{
+  string task_tid = 1;
+  int32 progress = 2; // 进度
+}
+
+message UpdateTaskStatusRsp{
+  string err = 1;
+  TaskData task = 2;
+}

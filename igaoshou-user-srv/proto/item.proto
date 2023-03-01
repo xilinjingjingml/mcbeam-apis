@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./proto;user";
+
+
+
+// 道具ID
+// 说明: 对应到 item/item.go
+enum ItemID {
+  CoinV = 0;    // v币
+  Ticket = 1;     // 奖券、门票
+  Diamond = 2;     // 钻石
+  Money = 3 ;    // 现金
+  Gold = 4; // 金币
+  GoldItem = 5;// 金币（代）
+  Credits = 6;// 积分
+  Turntable = 7; // 转盘币
+  GameDiamond = 8; // 棋牌钻石
+
+  Rebate = 100;// 免扣券
+
+  Rewards = 201;   // 奖励金(钻石代币)
+  ////////////////////////
+  //  玩家公开道具 3XX 会返回给客户端
+  Prob_Start = 300;
+
+  MemberCard = 301;// 会员系统1
+
+  CG_Dduanwei = 302; //闯关段位
+  QP_VipLevel = 303; // 棋牌vip等级
+  QP_VipExp = 304; // 棋牌vip经验值
+
+  Prob_End = 399;
+  ////////////////////////
+
+  Exp = 10000; // 经验值
+  GoldenMedal = 10001; // 奖章 金
+  SilverMedal = 10002; // 奖章 银
+
+  ProtectStarCard = 10003; // 保星卡
+  PromRedPacket = 10004; // 红包(推广)
+
+  GameGold = 10005; // 棋牌金币
+  GameBean = 10006; // 棋牌金豆
+
+  RedPacket = 10007; // 红包
+
+  Emoji = 10008; // 魔法表情
+
+  DDZGold = 10009; // 斗地主金币
+  DDZBean = 10010; // 斗地主金豆
+
+  CGGold = 10011; // 闯关金币
+  CGPower = 10012; // 闯关体力
+  CGCup = 10013; // 闯关奖杯
+
+  MJDoubleCard = 10014; // 双倍卡
+  MJCappedCard = 10015; // 封顶卡
+  MJStartCard = 10016; // 开局卡
+  ////////////////////////
+  SuperDoubleCard = 10017;  //  超级加倍卡
+  RecorderCard = 10018;     //  记牌器
+  FreeCard = 10019; // 免输卡
+  QP_WeeksCard = 10020; // 至尊周卡
+
+  // 斗地主
+  DDZ_HuaFei = 10021;  // 10021 斗地主话费
+  DDZ_FuKa = 10022; // 10022 斗地主福卡
+  DDZ_ZhaDanKaiJu = 10023; // 10023 炸弹开局卡
+
+  // 海外乐园游戏平台
+  LY_Gold = 10024; // 游戏币 (海外-乐园游戏平台)
+  LY_GoldFree = 10025; // 赠送游戏币  (海外-乐园游戏平台)
+  LY_Coin = 10030; // coin(海外-乐园游戏平台)
+
+  // 百元红包模式
+  BY_FREE_LOSE = 10026; // 百元红包免扣符
+  BY_VCOIN = 10027; // 百元红包元宝
+  BY_TOCASH = 10028; // 百元红包本金
+  BY_CASH = 10029; // 百元红包现金道具
+
+  // 巴西
+  BX_BONUS = 10040; // 巴西Bonus金币，不允许提现
+  BX_DOLLAR = 10041; // 巴西dollar金币，可以提现
+
+  PlatformMedal = 10042; // 奖章 平台联赛奖章
+
+  RP_ABTest = 90001; // 百元红包AB测试道具
+
+  // 说明: 1000000 以后，项目私用
+
+}

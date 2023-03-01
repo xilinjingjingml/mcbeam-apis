@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+import "gitee.com/microbeam/mcbeam-apis/mcbeam-common/proto/common.proto";
+
+package status;
+option go_package = "./proto;status";
+
+
+service UserStatus {
+  // 获取玩家状态
+  rpc GetPlyStatus(GetPlyStatusReq) returns (GetPlyStatusRsp) {}
+  // 更新玩家游戏状态
+  rpc UpdatePlyGameStatus(UpdatePlyGameStatusReq) returns (UpdatePlyGameStatusRsp) {}
+  // 获取玩家游戏状态
+  rpc GetPlyGameStatus(GetPlyGameStatusReq) returns (GetPlyGameStatusRsp) {}
+
+}
+
+enum GameType {
+  AsyncGame = 0;
+  RealTimeGame = 1;
+}
+
+message GameStatus {
+  enum Status {
+    Idle = 0;
+    Gaming = 1;
+  }
+  //@inject_tag: bson:"openid"
+  string openid = 1;
+  //@inject_tag: bson:"game_gid"
+  string game_gid = 2;
+  //@inject_tag: bson:"match_cid"
+  string match_cid = 3;
+  //@inject_tag: bson:"update_time"
+  int64 update_time = 4;
+  //@inject_tag: bson:"type"
+  GameType type = 5;
+  //@inject_tag: bson:"lock_by"
+  string lock_by = 6;
+  //@inject_tag: bson:"room_id"
+  string room_id = 7;
+  //@inject_tag: bson:"match_id"
+  string match_id = 8;
+  //@inject_tag: bson:"status"
+  Status status = 9; // 当前状态 0空闲中 1游戏中
+  //@inject_tag: bson:"metadata"
+  map<string, string> metadata = 10;
+}
+
+message AsyncGameData {
+  string match_id = 1;
+}
+
+message UpdatePlyStatusReq {
+  PlayerStatus status = 1;
+}
+
+message UpdatePlyStatusRsp{
+  string  err = 1;
+}
+
+message GetPlyStatusReq {
+  repeated string id_list = 1;
+}
+
+message GetPlyStatusRsp {
+  string err = 1;
+  repeated PlayerStatus status_list = 2;
+}
+
+// 玩家游戏状态
+message UpdatePlyGameStatusReq {
+  GameType type = 1;
+  string locked_by = 2; // 服务器ID
+  string game_gid = 3;
+  string openid = 4;
+  string room_id = 5;
+  string match_cid = 6;
+  string match_id = 7;
+  map<string, string> metadata = 8;
+}
+
+message UpdatePlyGameStatusRsp {
+  string err = 1;
+  GameStatus status = 2;
+}
+
+message GetPlyGameStatusReq{
+  string openid = 1;
+}
+
+message GetPlyGameStatusRsp {
+  string err = 1;
+  GameStatus status = 2; // 玩家游戏状态
+}

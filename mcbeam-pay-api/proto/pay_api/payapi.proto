@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package proto;
+
+import "proto/api.proto";
+
+service PayApi {
+	rpc PayOrder(proto.Request) returns (proto.Response) {}
+	rpc AliPayNotify(proto.Request) returns (proto.Response) {}
+	rpc WeChatPayNotify(proto.Request) returns (proto.Response) {}
+	rpc HuaWeiPayNotify(proto.Request) returns (proto.Response) {}
+	rpc XsollaPayNotify(proto.Request) returns (proto.Response) {}
+	rpc PayPalNotify(proto.Request) returns (proto.Response) {}
+	rpc ApplePayNotify(proto.Request) returns (proto.Response) {}
+	rpc GooglePayNotify(proto.Request) returns (proto.Response) {}
+	rpc VipPayNotify(proto.Request) returns (proto.Response) {}
+	rpc OutGoldNotify(proto.Request) returns (proto.Response) {}
+	rpc OKSpinNotify(proto.Request) returns (proto.Response) {}
+}
+
+message OrderReq {
+	string goods_param = 1;//商品参数(充值商城传商品id,积分商城传订单号)
+	string goods_name = 2;
+	int32  price = 3;
+	int32  store_id = 4; //0:充值商城，1：积分商城
+	string notify_url = 5;
+	int32  pay_plat = 6; //支付平台1:AliPay,2:WeChatPay,3:HuaWeiPay
+	string metadata = 7; //例如微信openid、pay_type的json串
+}
+
+message WeChatPayReq {
+	string openid = 1;//jsapi时必传
+	string pay_type = 2;//app、jsapi、h5
+}
+
+message PayShopNotifyReq {
+	string openid = 1;
+	string game_gid = 2;
+	int32  store_id = 3;
+	string goods_param = 4;
+	int32  total_amount = 5;
+}
+
+message PayShopNotifyRes {
+	string code = 1;
+	string msg = 2;
+}

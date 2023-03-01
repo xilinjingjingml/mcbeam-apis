@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package activity;
+
+import "proto/activity_proto.proto";
+
+//VIP特权
+service VipPrivilege {
+    rpc GetVipPrivilegeConfig(GetVipPrivilegeConfigReq) returns (GetVipPrivilegeConfigRsp) {}
+    rpc GetVipPrivilegeReward(GetVipPrivilegeRewardReq) returns (GetVipPrivilegeRewardRsp) {}
+    rpc GetPlayerVipPrivilege(GetPlayerVipPrivilegeReq) returns (GetPlayerVipPrivilegeRsp) {}
+}
+
+//message AwardItem{
+//    //@inject_tag: bson:"item_id"
+//    int32 item_id = 1;      //道具id  0：v币 1：奖券 2：钻石
+//    //@inject_tag: bson:"item_num"
+//    int32 item_num = 2;      //道具数量
+//}
+
+message GetVipPrivilegeConfigReq {
+}
+
+message GetVipPrivilegeConfigRsp {
+    message Desc {
+        //@inject_tag: bson:"name"
+        string name = 1;
+        //@inject_tag: bson:"new"
+        int32 new = 2;
+        //@inject_tag: bson:"update"
+        int32 update = 3;
+    }
+
+    message Right {
+        //@inject_tag: bson:"level"
+        int32 level = 1;
+        //@inject_tag: bson:"experience"
+        int32 experience = 2;
+        //@inject_tag: bson:"remedies_times"
+        int32 remedies_times = 3;
+        //@inject_tag: bson:"remedies_multiple"
+        double remedies_multiple = 4;
+        //@inject_tag: bson:"exchange_gold"
+        double exchange_gold = 5;
+        //@inject_tag: bson:"wheel_gold"
+        double wheel_gold = 6;
+        //@inject_tag: bson:"avoid_loss_pro"
+        double avoid_loss_pro = 7;
+        //@inject_tag: bson:"desc"
+        repeated Desc desc = 8;
+        //@inject_tag: bson:"rewards"
+        repeated AwardItem rewards = 9;
+        //@inject_tag: bson:"round_rewards"
+        repeated AwardItem round_rewards = 10;   //每一局游戏结束自动下发道具
+        int32 state = 11; //0未达成，1可领取，2已领取
+    }
+    string err = 1;
+    repeated Right list = 2;
+    int32 today_round_exp = 3;
+}
+
+message GetVipPrivilegeRewardReq {
+    int32 level = 1;
+}
+
+message GetVipPrivilegeRewardRsp {
+    string err = 1;
+    repeated AwardItem award_item = 4;
+}
+
+message GetPlayerVipPrivilegeReq {
+
+}
+
+message GetPlayerVipPrivilegeRsp {
+    string err = 1;
+
+    //@inject_tag: bson:"level"
+    int32 level = 2;
+    //@inject_tag: bson:"remedies_times"
+    int32 remedies_times = 3;
+    //@inject_tag: bson:"remedies_multiple"
+    double remedies_multiple = 4;
+    //@inject_tag: bson:"exchange_gold"
+    double exchange_gold = 5;
+    //@inject_tag: bson:"wheel_gold"
+    double wheel_gold = 6;
+    //@inject_tag: bson:"avoid_loss_pro"
+    double avoid_loss_pro = 7;
+}

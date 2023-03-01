@@ -1,0 +1,1173 @@
+syntax = "proto3";
+
+package proto.match;
+
+option go_package = "./proto;match";
+
+//import "github.com/micro/micro/proto/api/api.proto";
+
+service Match {
+  // 加入比赛
+  rpc JoinMatch(JoinMatchReq) returns (JoinMatchRsp) {}
+  // 取消匹配
+  rpc CancelMatch(CancelMatchReq) returns (CancelMatchRsp) {}
+  // 确认进入比赛
+  rpc MatchConfirm(MatchConfirmReq) returns(MatchConfirmRsp) {}
+  // 立即开始（如果玩家不足，直接创建新的比赛）
+  rpc EnterMatch(EnterMatchReq) returns (EnterMatchRsp) {}
+  // 上传比赛积分
+  rpc SubmitScore(SubmitScoreReq) returns (SubmitScoreRsp) {}
+
+  // 获取比赛详细信息(配置)
+  rpc GetMatchDetails(GetMatchDetailsReq) returns (GetMatchDetailsRsp) {}
+  // 获取比赛实例信息
+  rpc GetMatch(GetMatchReq) returns (GetMatchRsp) {}
+  // 获取活动赛结果
+  rpc GetActivityMatch(GetActivityMatchReq) returns (GetActivityMatchRsp) {}
+  // 活动赛排行
+  rpc ActivityMatchRankList(ActivityMatchRankListReq) returns (ActivityMatchRankListRsp) {}
+
+  // 获取进行中的比赛列表
+  rpc GetInProgressList(GetInProgressListReq) returns (GetInProgressListRsp) {}
+  // 获取已完成的比赛列表
+  rpc GetCompletedList(GetCompletedListReq) returns (GetCompletedListRsp) {}
+  // 获取回合战绩
+  rpc GetRoundRecordList(GetRoundRecordListReq) returns (GetRoundRecordListRsp) {}
+  // 领取比赛排名奖励
+  rpc GetMatchAward(GetMatchAwardReq) returns(GetMatchAwardRsp) {}
+  //  获取排行
+  rpc LeagueRankList(RankListReq) returns (RankListRsp) {}
+  //  获取联赛数据
+  rpc GetCurLeague(GetCurLeagueReq) returns (GetCurLeagueRsp) {}
+  // 获取联赛奖励配置
+  rpc GetLeagueAwardConfig(GetLeagueAwardConfigReq) returns (GetLeagueAwardConfigRsp){}
+  // 获取联赛奖励
+  rpc GetLeagueAward(GetLeagueAwardReq) returns (GetLeagueAwardRsp) {}
+  // 查询玩家战绩
+  rpc GetPlayerProfile(GetPlayerProfileReq) returns (GetPlayerProfileRsp) {}
+  // 获取活动赛
+  rpc GetNextActivityMatch(GetNextActivityMatchReq) returns (GetNextActivityMatchRsp) {}
+
+  // 获取比赛分享码
+  rpc GetShareCode(GetShareCodeReq) returns (GetShareCodeRsp) {}
+  // 被邀请人回复
+  rpc AcceptedInvite(AcceptedInviteReq) returns (AcceptedInviteRsp) {}
+
+  // 获取玩家游戏数据
+  rpc GetStatisticsMetrics(GetStatisticsMetricsReq) returns (GetStatisticsMetricsRsp) {}
+}
+
+service MatchRpc {
+  // 获取比赛列表
+  rpc GetMatchDetailList(GetMatchDetailListReq) returns (GetMatchDetailListRsp) {}
+  // 获取玩家游戏局数
+  rpc GetPlayerProfile(GetPlayerProfileReq) returns (GetPlayerProfileRsp) {}
+  // 获取玩家比赛信息
+  rpc GetPlyMatchInfo(GetPlyMatchInfoReq) returns (GetPlyMatchInfoRsp) {}
+  // 更新玩家比赛积分
+  rpc UpdateMatchScore(UpdateMatchScoreReq) returns (UpdateMatchScoreRsp) {}
+  // 更新玩家玩家游戏结果
+  rpc UpdateGameResult(UpdateGameResultReq) returns (UpdateGameResultRsp) {}
+  // 更新玩家比赛状态
+  //  rpc UpdateMatchStatus(UpdateMatchStatusReq)returns (UpdateMatchStatusRsp){}
+  // 查询比赛信息
+  rpc GetMatchData(GetMatchDataReq) returns (GetMatchDataRsp) {}
+  // 比赛排行
+  rpc MatchRankList(MatchRankListReq) returns (MatchRankListRsp) {}
+
+  // 更新比赛标签
+  rpc UpdateMatchLabels(UpdateMatchLabelsReq) returns (UpdateMatchLabelsRsp) {}
+
+  // 获取比赛详细信息(配置)
+  rpc GetMatchDetails(GetMatchDetailsReq) returns (GetMatchDetailsRsp) {}
+
+  // 获取玩家最近的游戏记录
+  rpc GetLatestRoundList(GetLatestRoundListReq) returns (GetLatestRoundListRsp) {}
+}
+
+// 段位
+service Grade {
+  // 赛季信息获取
+  rpc GetCurSeason(GetCurSeasonReq) returns (GetCurSeasonRsp) {}
+  // 开启新赛季
+  rpc SeasonSettle(SeasonSettleReq) returns (SeasonSettleRsp) {}
+  // 获取当前比赛结算后，星级变化(段位/星级) 最新段位
+  //  rpc GetChangeLog(GetChangeLogReq) returns (GetChangeLogRsp) {}
+  // 段位配置
+  rpc ListConfig(ListConfigReq) returns (ListConfigRsp){}
+  // 段位奖励配置
+  rpc ListRewardConfig(ListRewardConfigReq) returns (ListRewardConfigRsp) {}
+  // 获取段位奖励列表 (领取状态)
+  rpc ListRewardStatus(ListRewardStatusReq) returns(ListRewardStatusRsp) {}
+  // 领取段位奖励
+  rpc GetReward(GetRewardReq) returns(GetRewardRsp) {}
+  // 获取段位排行 （点赞数）
+  rpc ListRank(ListGradeRankReq) returns (ListGradeRankRsp) {}
+  // 点赞(不可为自己点赞)
+  rpc Like(LikeGradeRankReq)returns (LikeGradeRankRsp) {}
+  // 当前点赞记录 (赛季、日期、玩家ID列表)
+  rpc TodayLikeRecord(TodayLikeRecordReq) returns (TodayLikeRecordRsp) {}
+  // 荣誉之旅 历史段位
+  rpc ListGradeRecord(ListGradeRecordReq) returns (ListGradeRecordRsp) {}
+  // 获取玩家段位信息
+  rpc GetGrade(GetGradeReq) returns(GetGradeRsp) {}
+  // 保星(保星卡使用)
+  rpc ProtectStar(ProtectStarReq) returns (ProtectStarRsp){}
+}
+
+// 赛季信息
+message GetCurSeasonReq {
+  string openid = 1;
+}
+
+// 获取段位信息(当前赛季)
+message GetCurSeasonRsp {
+  string cur_season_id = 1; // 赛季标识
+  int64 begin_time = 2; // 赛季开始时间
+  int64 stop_time = 3; // 赛季结束时间
+  GradeData grade = 4; // 段位信息
+  int32  rank = 5; // 当前排名
+  int32 rank_max = 6; // 总排名   (总排名 - 当前排名 ) / 总排名
+  SeasonSettle last_settle = 10;   // 上一赛赛季结算信息. 如果玩家无未结算的，则为空
+  string  err = 11;
+}
+
+message SeasonSettle {
+  string season_id = 1; // 赛季标识
+  GradeData grade = 2; // 段位信息
+  repeated Item award_list = 6; // 赛季奖励
+  int64 start_time = 7; // 开始时间
+  int64 stop_time = 8; // 结束时间
+}
+
+message GetChangeLogReq {
+  string match_id = 1;
+}
+
+// 星级变化(段位/星级) 最新段位
+message GetChangeLogRsp {
+  GradeData before = 1; // 变化前段位
+  GradeData after = 2; // 变化前段位
+  repeated Item award_list = 3; // 段位奖励
+  string err = 4;
+}
+
+message ListConfigReq {
+
+}
+// 段位配置
+message GradeConfig {
+  int32 major = 1;  // 大段位
+  int32 minor = 2; // 小段位
+  int32 max_star = 3; // 当前小段位最大星数
+  string name = 4; // 段位名称
+  string icon = 5; // 段位icon
+  int32 level = 6; // 段位等级，从1开始连续
+}
+
+message ListConfigRsp {
+  string err = 1;
+  repeated GradeConfig grades = 2;
+}
+
+message ListRewardConfigReq {
+}
+
+message ListRewardConfigRsp {
+  message AwardInfo {
+    int32 award_id = 1;
+    int32 major = 2;
+    int32 minor = 3;
+    repeated Item award_list = 4;
+  }
+  string err = 1;
+  repeated AwardInfo award_list = 2; // 奖励列表
+}
+
+message ListRewardStatusReq {
+
+}
+
+message ListRewardStatusRsp {
+  message AwardStatus {
+    int32 award_id = 1;
+    int32 status = 2; // 0条件不满足 1未领取 2已领取
+  }
+  string err = 1;
+  repeated AwardStatus status_list = 2;
+}
+
+message GetRewardReq {
+  int32 award_id = 1;
+}
+
+message GetRewardRsp {
+  string err = 1;
+  repeated Item award_list = 2; // 奖励列表
+}
+
+message ListGradeRankReq {
+  string season_id = 1;
+  int32 start = 2; // 开始名次
+  int32 end = 3; // 结束名次
+}
+
+message GradeRank {
+  int32 rank = 1;
+  GradeData grade = 2;
+  int32 like_star = 5;  // 点赞次数
+  string openid = 6;
+  string nickname = 7;
+  string head_image = 8;
+  repeated Item props = 9; // 玩家展示道具
+}
+
+message ListGradeRankRsp {
+  string err = 1;
+  string season_id = 2;
+  GradeRank my_rank = 3;
+  repeated GradeRank list = 4;
+}
+
+message LikeGradeRankReq {
+  string season_id = 1;
+  string openid = 2;
+}
+
+message LikeGradeRankRsp  {
+  string err = 1;
+  int32 surplus_num = 2; // 剩余点赞次数
+}
+
+message TodayLikeRecordReq {
+
+}
+
+message TodayLikeRecordRsp {
+  message Record {
+    string  openid = 1; // 被点赞玩家ID
+    int64 timestamp = 2; // 点赞时间
+  }
+  string err = 1;
+  int32 like_times = 2; // 已点次数
+  int32 max_like_times = 3; // 最大点赞次数
+  repeated Record records = 4; // 点赞记录
+}
+
+message SeasonSettleReq {
+
+}
+
+message SeasonSettleRsp {
+  string err = 1;
+  repeated Item award_list = 6; // 赛季奖励
+}
+
+// 段位信息
+message GetGradeReq {
+  string season_id = 1;
+  string openid = 2;
+}
+
+message GradeData {
+  int32 major = 1;
+  int32 minor = 2;
+  int32 star = 3;
+}
+
+//(最终段位/最高段位 总局数 胜率 最高连胜 开始结束日期) 当前赛季标识
+message GetGradeRsp {
+  string season_id = 1;
+  int64 start_time = 2; // 开始时间
+  int64 stop_time = 3; // 结束时间
+  GradeData grade = 4; //最终段位
+  GradeData max_grade = 5; // 最高段位
+  int32 total_cnt = 6; //总局数
+  int32 win_cnt = 7; // 比赛胜利次数
+  int32 max_win_streak_cnt = 8; // 最高连胜
+  string err = 9;
+}
+
+
+message ListGradeRecordReq {
+  int32 start = 1; // 起始页
+  int32 end = 2; // 每页次数
+}
+
+message ListGradeRecordRsp {
+  message Record {
+    string season_id = 1;
+    int64 start_time = 2; // 开始时间
+    int64 stop_time = 3; // 结束时间
+    GradeData grade = 4; //最终段位
+    GradeData max_grade = 5; // 最高段位
+    int32 total_cnt = 6; //总局数
+    int32 win_cnt = 7; // 比赛胜利次数
+    int32 max_win_streak_cnt = 8; // 最高连胜
+  }
+  string err = 1;
+  repeated Record records = 2;
+}
+
+message ProtectStarReq {
+
+}
+
+message ProtectStarRsp {
+  string err = 1;
+  GradeData grade = 2; // 最新段位信息
+}
+
+
+///////////////
+
+message GetMatchReq {
+  string match_id = 1;
+}
+
+message GetMatchRsp {
+  string err = 1;
+  int32 match_type = 2;
+  int32 status = 3; // 当前比赛状态 0进行中 1已完成
+  map<string, RoundData> rounds = 4;
+  repeated StageData stages = 5;
+  int32 ply_status = 6;
+  string current_round = 7;
+  int32 current_stage = 8;
+  repeated string labels = 9;
+}
+
+message BattleInfo {
+  string openid = 1;
+  int64 score = 2;
+  int32 status = 3; // 玩家状态 0正在游戏 1已完成 2已终止
+  int64 update_time = 4; // 数据变更时间
+  int64 rebattle_score = 5; // 平局时分数
+  int32 rank = 6; // 排名
+}
+
+message RoundData {
+  string round_id = 1;
+  repeated BattleInfo vs = 2;
+  string winner = 3;
+  int64 expire_at = 4; // 终止时间
+  int64 gaming_time = 5;
+  RoomInfo room_info = 6; // 比赛房间
+  int64 rand_seed = 7; // 随机种子
+  string metadata = 8;
+}
+
+message StageData {
+  int32 index = 1;
+  repeated string round_list = 2;
+}
+
+message GetMatchAwardReq{
+  string match_id = 1;
+}
+
+message GetMatchAwardRsp{
+  string err = 1;
+  map<int32, int64> awards = 2; // 奖励列表
+  int32 status_code = 3; // 错误码
+}
+
+message GetInProgressListReq {
+
+}
+
+message BattleItem {
+  string openid = 1;
+  int64 score = 2;
+  int32 status = 3;
+  int32 rank = 4; // 当前排名
+  bool win = 5; //胜利、失败
+  string head_image = 6; // 头像
+  string nickname = 7; // 昵称
+  string area_info = 8; // 区域位置
+  int64 rebattle_score = 9; // 平局时分数
+  repeated Item props = 10; // 展示道具
+}
+
+message BattingInfo {
+  string round_id = 1;
+  string match_cid = 2;
+  string match_id = 3;
+  int32 type = 4; // 比赛类型
+  int64 create_at = 5;
+  int64 expire_at = 6;
+  int32 round_status = 7;
+  int32 match_status = 8;
+  repeated BattleItem players = 9;
+  int32 total_stage = 10;
+  int32 current_stage = 11;
+  int32 ply_status = 12;
+  int64 finish_time = 13; // 完成比赛时间
+  map<string, string> metadata = 14;
+  repeated string labels = 15;
+}
+
+message GetInProgressListRsp {
+  string err = 1;
+  repeated BattingInfo items = 2;
+}
+
+message GetCompletedListReq {
+}
+
+message GetCompletedListRsp {
+  string err = 1;
+  repeated BattingInfo items = 2;
+}
+
+message GetRoundRecordListReq {
+  string label = 1; // 比赛标签
+  int32 page = 2; // 页码
+  int32 num = 3;  // 页数量
+}
+
+message GetRoundRecordListRsp {
+  string err = 1;
+  repeated BattingInfo items = 2;
+}
+
+enum MatchStatus {
+  Waiting = 0; // 等待对手完成
+  Ready = 1; // 未完成
+  Closed = 2; // 已终止
+  Finished = 3; // 已完成
+}
+
+message JoinMatchReq {
+  string match_cid = 1; // 比赛配置ID 同 match_list 二选一
+  repeated string match_list = 2; // 比赛匹配列表  同 match_cid二选一
+  map<string, string> metadata = 3; // 匹配参数
+}
+
+message JoinMatchRsp {
+  string err = 1;
+  repeated string opponents = 2; // 可能的对手列表
+  string match_cid = 3; // 当前比赛ID
+  string match_id = 4; // 比赛ID
+}
+
+//
+message JoinMatchNot {
+  string match_cid = 1; // 比赛配置ID
+  string match_id = 2; // 比赛ID
+  string round_id = 3; // 回合 match
+  int64 rand_seed = 4; // 随机种子
+  string opponent_uid = 5; // 对手ID 废弃
+  RoomInfo room_info = 6; // 比赛房间
+  repeated PlayerBrief opponent_list = 7; // 对手列表
+}
+
+// 匹配状态通知
+message MatchingStatusNot {
+  string err = 1;       // 是否出错
+  string match_cid = 2; // 游戏场次
+  string match_id = 3; // 比赛ID
+  int64 start_time = 4; // 开始匹配时间
+}
+
+
+// 匹配确认通知
+message ConfirmationRequestNot {
+  string match_cid = 1;
+  string match_id = 2;
+  repeated PlayerBrief opponent_list = 3; // 对手列表
+}
+
+enum ConfirmOp {
+  Cancel = 0;
+  Confirmed = 1;
+}
+// 比赛确认
+message MatchConfirmReq {
+  //@gotags: bson:"match_cid"
+  string match_cid = 1;
+  string match_id = 2;
+  ConfirmOp  confirmed = 3; // 0取消 1确认
+}
+
+message MatchConfirmRsp {
+  string err = 1;
+  string match_cid = 2; // 回传match_cid
+  repeated string ply_list = 3; // 已经确认玩家列表
+
+}
+
+message MatchConfirmNot {
+  string match_cid = 1;
+  string match_id = 2;
+  string openid = 3; // 当前确认的玩家
+  ConfirmOp op = 4;
+  repeated PlayerBrief opponent_list = 5; // 对手列表
+}
+
+message RoomInfo {
+  string room_id = 1;
+  string server_id = 2;
+  string game_gid = 3;
+  string metadata = 4;
+}
+
+message PlayerBrief {
+  string  openid = 1;
+  string headimage = 2;
+  string area_info = 3;
+  string nickname = 4;
+  repeated Item props = 5;
+  string game_gid = 6;
+  int32 plat_aid = 7;
+}
+
+message EnterMatchReq {
+  string match_id = 1;
+  string match_cid = 2;
+}
+
+message RoundInfo {
+  string match_cid = 1; // 比赛配置ID
+  string match_id = 2; // 比赛ID
+  string round_id = 3; // 回合 match
+  int64 rand_seed = 4; // 随机种子
+  string opponent_uid = 5; // 对手ID  废弃
+  RoomInfo room_info = 6; // 比赛房间
+  repeated PlayerBrief opponent_list = 7; // 对手列表
+}
+
+message EnterMatchRsp {
+  string err = 1;
+  //  string match_id = 2;
+  RoundInfo round = 3;
+}
+
+//message MatchCandidatesNot {
+//  string match_cid = 1; // 比赛配置ID
+//  repeated string uid_list = 2; // 候选对手列表
+//}
+enum SubmitScoreType {
+  SBT_GAME_OVER = 0;  // 游戏结束并提交成绩
+  SBT_GAME_ABORT = 1; // 中止游戏
+  SBT_SUBMIT_SCORE = 2; // 提交分数
+  SBT_GAME_FINISH = 3; //  结束游戏
+}
+
+message SubmitScoreReq {
+  string match_id = 1;
+  int64 score = 2;
+  SubmitScoreType type = 3;
+}
+
+message SubmitScoreRsp {
+  string err = 1;
+  int32 status_code = 2;
+  string match_id = 3;
+}
+
+message CancelMatchReq {
+  string match_cid = 1;
+}
+
+message CancelMatchRsp {
+  string err = 1;
+}
+
+message GetMatchDetailsReq {
+  string match_cid = 1;
+}
+
+message Item {
+  enum Type {
+    Platform = 0; // 平台道具
+    Game = 1; // 游戏道具
+  }
+  int32 id = 1;  // 道具ID
+  int64 num = 2; // 道具数量
+  Type type = 3; // 0平台道具 1游戏道具
+  int64 expire_at = 4; // 过期时间
+}
+
+message GetMatchDetailsRsp {
+  string err = 1;
+  int32 type = 2;
+  string name = 3;
+  string  desc = 4;
+  string rule = 5;
+  repeated Item entry_fee = 6;
+  repeated AwardConf award_list = 7;
+  repeated string labels = 8;
+}
+
+message GetMatchDetailListReq {
+  string game_id = 1;
+  int32 plat_aid = 2;
+}
+
+message GetMatchDetailListRsp {
+  string config = 1;
+}
+
+message RankListReq {
+  string league_id = 1; // 联赛Id
+  int32 start = 2; // 开始名次
+  int32 end = 3; // 结束名次
+}
+
+message RankData {
+  int64 rank = 1;
+  string openid = 2;
+  int64 medal_num = 3; // 奖章数量
+  string nickname = 4; // 昵称
+  string head_image = 5; // 头像
+  string area_info = 6; // 区域信息
+  repeated Item props = 7; // 玩家展示道具
+}
+
+message RankListRsp {
+  string err = 1;
+  repeated RankData rank_list = 2;
+}
+
+message GetCurLeagueReq {
+  enum Type {
+    PRACTICE = 0; // 练习赛
+    PROFESSIONAL = 1; // 专业联赛
+  }
+  int32 league_type = 1;
+}
+
+message LeagueAward {
+  string league_id = 1;
+  int64 rank = 2;
+  repeated Item award_list = 3;
+  int64 medal_num = 4;
+  int64 end_time = 5;
+}
+
+message GetCurLeagueRsp {
+  string err = 1;
+  string league_id = 2;
+  int64 end_time = 3; // 联赛结束时间
+  int64 rank = 4; // 当前排名
+  int64 medal_num = 5; // 当前奖章数量
+  repeated Item total_bonus = 6; // 总奖池
+  LeagueAward last_league_award = 7; // 上赛季奖励，奖励领取之后，字段为空
+}
+
+message GetLeagueAwardConfigReq {
+  string league_id = 1;
+}
+
+message GetLeagueAwardConfigRsp{
+  message Award{
+    int32 start = 1;
+    int32 end = 2;
+    repeated Item item_list = 3;
+  }
+  string err = 1;
+  repeated Award award_list = 2;
+}
+
+message GetLeagueAwardReq {
+  string league_id = 1;
+}
+
+message GetLeagueAwardRsp {
+  string err = 1;
+}
+
+message GetPlayerProfileReq {
+  string openid = 1;
+  string game_id = 2;
+}
+
+message GetPlayerProfileRsp {
+  message Record {
+    int64 max_score = 1;
+    string match_id = 2;
+  }
+  string err = 1;
+  int32 total_game_count = 2; // 总游戏次数
+  int32 champion_game_count = 3; // 获得冠军总次数
+  int32 max_continue_win_count = 4; // 最大连胜次数
+  repeated bool latest_win_lost = 5; // 最近游戏结果
+  int32 plat_game_count = 6; // 平台游戏总局数
+  int32 round_count = 7; // 回合局数
+  int32 continue_win_count = 8; // 当前连胜
+  Record best_record = 9; // 最佳记录
+}
+
+message GetPlayerMatchGameContReq {
+  string openid = 1;
+  string game_gid = 2;
+}
+
+message GetPlayerMatchGameContRsp {
+  string err = 1;
+  int32 total_game_count = 2; // 总游戏次数
+  int32 champion_game_count = 3; // 获得冠军总次数
+  int32 max_continue_win_count = 4; // 最大连胜次数
+  repeated bool latest_win_lost = 5; // 最近游戏结果
+}
+
+enum LeagueType {
+  LeagueTypePractice = 0;
+  LeagueTypeProfessional = 1;
+}
+
+enum MatchType {
+  MatchTypeInvalid = 0;
+  MatchTypePractice = 1;  // 练习赛
+  MatchTypeVS = 2;        // 对战赛
+  MatchTypeChampion = 3;  // 锦标赛
+  MatchTypeActivity = 4;  // 活动赛
+  MatchTypeMutil = 5;     // 多人赛
+  MatchTypeRealTime = 6;  // 实时赛
+};
+
+message MatchResultNot {
+  message RankData {
+    string openid = 1;
+    int64 rank = 2;
+    int64 join_time = 3; // 玩家加入比赛时间
+    int32 match_count = 4; // 比赛加入次数，部分比赛，玩家淘汰后还可以再次加入
+  }
+  string game_id = 1;
+  int32 plat_aid = 2;
+  string match_id = 3;
+  string match_cid = 4;
+  MatchType match_type = 5; // 比赛类型
+  LeagueType league_type = 6; // 联赛类型
+  int32 entry_fee_type = 7; // 报名费类型
+  int32 max_player_num = 8; // 参数人数
+  int32 total_stage = 9; // 比赛共有几个阶段
+  int64 create_time = 10; // 比赛创建时间
+  int64 complete_time = 11;  // 比赛完成时间
+  repeated RankData players = 12;
+  string labels = 13; // 比赛标签
+}
+
+message MatchSubmitScoreNot {
+  string game_id = 1;
+  int32 plat_aid = 2;
+  string match_id = 3;
+  string match_cid = 4;
+  MatchType match_type = 5; // 比赛类型
+  LeagueType league_type = 6; // 联赛类型
+  repeated Item entry_fee = 7; // 报名费
+  int32 max_player_num = 8; // 参数人数
+  int32 total_stage = 9; // 比赛共有几个阶段
+  int64 create_time = 10; // 比赛创建时间
+  int64 update_time = 11;  // 操作时间
+  string openid = 12;
+  int64 score = 13;
+  int32 current_stage = 14; // 当前阶段，从0开始
+  string labels = 15; // 比赛标签
+}
+
+message GetPlyMatchInfoReq {
+  string match_id = 1;
+  string openid = 2;
+}
+
+message GetPlyMatchInfoRsp {
+  string game_id = 1;
+  int32 plat_aid = 2;
+  string match_id = 3;
+  string match_cid = 4;
+  MatchType match_type = 5; // 比赛类型
+  LeagueType league_type = 6; // 联赛类型
+  repeated Item entry_fee = 7; // 报名费
+  int32 max_player_num = 8; // 参数人数
+  int32 total_stage = 9; // 比赛共有几个阶段
+  int64 create_time = 10; // 比赛创建时间
+  int64 complete_time = 11;  // 比赛完成时间
+  string openid = 12;
+  int64 rank = 13;
+  int64 join_time = 14; // 玩家加入比赛时间
+  int32 match_count = 15; // 比赛加入次数，部分比赛，玩家淘汰后还可以再次加入
+  repeated Item award_list = 16; // 获得的奖励
+}
+
+message PlayerMatchScore {
+  string openid = 1;
+  SubmitScoreType type = 2;
+  int64 score = 3;
+  //  string round_id = 4; // 废弃
+  map<string, string> tags = 5; // 记录到日志
+  repeated string labels = 6; // 玩家给记录加标签
+}
+
+message UpdateMatchScoreReq {
+  string match_id = 1;
+  repeated PlayerMatchScore scores = 2;
+  // repeated string labels = 3;
+  repeated string winners = 4; // 胜利玩家列表
+  map<string, string> tags = 5;
+}
+
+message UpdateMatchScoreRsp {
+  string err = 1;
+}
+
+message UpdateGameResultReq {
+  string openid = 1;
+  SubmitScoreType type = 2;
+  int64 score = 3;
+  string match_id = 4;
+  //  string round_id = 5;
+  map<string, string> tags = 6; // 记录到日志
+  repeated string labels = 7; // 玩家给记录加标签
+}
+
+message UpdateGameResultRsp {
+  string err = 1;
+}
+
+//message UpdateMatchStatusReq {
+//  enum Status {
+//    Gaming = 0;   // 开始游戏
+//    GameOver = 1; // 游戏结束
+//    GameABORT = 2; // 游戏终止
+//  }
+//  string match_id = 1;
+//  Status status = 2;
+//  map<string, string> tags = 3;
+//}
+//
+//message UpdateMatchStatusRsp {
+//  string err = 1;
+//}
+
+message UserData {
+  string openid = 1; // 玩家ID
+  string uuid = 2; // 玩家平台ID
+  string nickname = 3; // 玩家昵称
+  string headimage = 4; // 头像
+  string area_info = 5; // 区域信息
+  int64 reg_time = 6; // 注册时间
+  string game_gid = 7; // 游戏ID
+  string pn = 8; // pn
+  int32 plat_aid = 9; // 平台ID
+  int32 flag = 10; // 玩家类型
+}
+
+message GetActivityMatchReq {
+  string match_id = 1;
+}
+
+message GetActivityMatchRsp {
+  string match_cid = 1;
+  int64 last_score = 2; // 最近一次得分
+  int32 status = 3; // 玩家状态
+  int32 match_status = 4; // 比赛状态
+  int32 join_times = 5; // 参赛次数
+  int32 max_join_times = 6; // 允许最大参赛次数
+  int64 top_score = 7; // 当前最高得分
+  int64 begin_time = 8; // 开始时间
+  int64 stop_time = 9; // 结束时间
+  string err = 10;
+}
+
+message ActivityMatchRankListReq {
+  string match_id = 1; // 比赛ID
+  int32 start = 2; // 开始名次
+  int32 end = 3; // 结束名次
+}
+
+message ActivityMatchRankListRsp {
+  message RankData {
+    int64 rank = 1;
+    string openid = 2;
+    int64 score = 3; // 得分
+    string nickname = 4; // 昵称
+    string head_image = 5; // 头像
+    string area_info = 6; // 区域信息
+    repeated Item props = 7; // 玩家展示道具
+  }
+
+  string err = 1;
+  int32 status_code = 2;
+  RankData my_rank = 3;
+  repeated RankData rank_list = 4;
+
+}
+
+message GetNextActivityMatchReq {
+  string match_cid = 1;
+}
+
+message GetNextActivityMatchRsp {
+  string err = 1;
+  int32 status_code = 2;
+  string match_id = 3;
+  int64 begin_time = 4;
+  int64 end_time = 5;
+}
+
+// 匹配中的玩家
+message MatchingPlayer {
+  message Matching {
+    repeated string match_list = 1;
+  }
+  string openid = 1;
+  map<string, Matching> type_list = 2;
+}
+
+// 未完成比赛列表
+message UnderwayMatchingData {
+  string match_id = 1;
+  int32 valid_join_times = 2; // 有效玩家参与次数（一个玩家可以参赛多次，需要占用比赛名额）
+  int64 master_points = 3; // 大师分
+  repeated string openid_list = 4; // 当前玩家比赛场中的玩家
+
+
+}
+
+// topic: match.status.refresh
+message RefreshMatchStatusNot {
+  string match_id = 1;
+}
+
+
+message GetMatchDataReq{
+  string match_id = 1;
+}
+
+message MatchPlayer {
+  string openid = 1; // 玩家ID
+  int32 status = 2; // 玩家参赛状态
+  int64 join_time = 3; // 加入比赛时间
+  int32 rank = 4; // 当前排名
+  int32 current_stage = 5; // 当前回合
+  int32 ply_flag = 6; // 玩家类型: 0玩家 1:机器人
+  repeated Item award_list = 7; // 奖励列表
+  string last_round_id = 8; // 最后一回合ID
+}
+
+message MatchInfo {
+  message Award {
+    int32 rank_begin = 1; // 起始名次
+    int32 rank_end = 2; // 结束名次
+    repeated Item award_list = 3; // 获得的奖励
+  }
+  int32 match_type = 2; // 比赛类型®
+  int32 status = 3; // 当前比赛状态 0进行中 1已完成
+  int32 plat_aid = 5; // 平台
+  int64 create_at = 6; // 比赛创建时间
+  int64 expire_at = 7; // 比赛结束时间
+  map<string, RoundData> rounds = 8;
+  repeated StageData stages = 9; // 阶段
+  string match_cid = 10; // 比赛类型
+  string game_gid = 11; // 游戏ID
+  repeated Item entry_fee = 12; // 报名费
+  repeated Award awards = 13; // 奖励列表
+  repeated MatchPlayer players = 14; // 参与玩家列表
+  int32 max_ply_num = 15; // 最大参与人数
+  int32 min_ply_num = 16; // 最少参与人数
+  int32 player_num = 17; // 参赛人数
+  string metadata = 18;
+}
+
+message GetMatchDataRsp {
+  string err = 1;
+  string data = 2;
+}
+
+message MatchRankListReq {
+  string match_id = 1;
+}
+
+message MatchRankListRsp {
+  string err = 1;
+  string data = 2;
+}
+
+
+message AwardConf {
+  message RankRange  {
+    int32 start = 1;
+    int32 end = 2;
+  }
+  RankRange range = 1;
+  repeated Item items = 2;
+}
+
+message MatchPlayerStatus {
+  string openid = 1;
+  string game_id = 2;
+  string cur_match_id = 3;
+  string cur_match_cid = 4;
+  int64 last_match_time = 5;
+}
+
+// 玩家匹配需要用的信息
+message MatchingData {
+  string openid = 1; // 玩家ID
+  string game_id = 2; // 游戏ID
+  string match_cid = 3; // 比赛场次
+  int64 join_time = 4; // 开始匹配时间
+  int64 master_points = 5; // 当前大师分
+  int32 game_count = 6; // 比赛次数（已结算）
+  int32 round_count = 7; // 游戏局数
+  float latest_win_rate = 8; // 最近10局胜率
+  int32 ctrl = 9; // 输赢控制
+  int32 win_lost = 10; // 输赢控制
+  int32 newbie = 11; // 新人标记
+  int32 level = 12; // 游戏等级
+  int32 plat_level = 13; // 平台等级
+  int32 exp = 14; // 游戏经验
+  int32 plat_exp = 15; // 平台经验
+  int64 reg_time = 16; // 游戏账号注册时间
+  int64 real_master_point = 17; // 实际大师分
+  string pn = 18;
+  int32 plat_aid = 19;
+  int32 match_type = 20;
+  string confirm_id = 21; // 比赛ID
+  int64 confirm_time = 22;
+  int32 matchCode = 23;
+  MatchConfig match_config = 24;
+
+  string matching_queue = 25; // 当前匹配队列
+}
+
+message GameResult {
+  string openid = 1;
+  int32 game_count = 2;
+  int32 plat_game_count = 3;
+  int32 round_count = 4;
+  int32 plat_round_count = 5;
+  int32 win_count = 6;
+  int32 plat_win_count = 7;
+  int64 master_points = 8;
+  repeated int32 last10_rounds = 11; // 最近10局
+  float last10_win_rate = 12; // 最近10局胜率
+  string game_id = 13;
+}
+
+message BasePlayerInfo {
+  string openid = 1;
+  string uuid = 2;
+  string pn = 3;
+  string head_image = 4;
+  string area_info = 5;
+  string nickname = 6;
+  int64 reg_time = 7;
+  int32 plat_aid = 8;
+  int32 flag = 9;
+  string game_id = 10;
+  int32 sex = 11;
+  repeated Item props = 12;
+}
+
+message GetShareCodeReq {
+  string match_cid = 1;
+  repeated string notify_list = 2; // 通知玩家列表
+}
+
+message GetShareCodeRsp {
+  string err = 1; // 错误
+  int32 shard_code = 2; // 邀请码
+  int64 expire_at = 3; // 过期时间
+}
+
+// 邀请比赛消息
+message MatchInviteNot {
+  string match_cid = 1; // 场次ID
+  int32 share_code = 2; // 邀请码
+  string inviter = 3; // 邀请人
+  repeated PlayerBrief opp_list = 4; // 对手列表
+}
+
+// 对方接受了邀请通知
+message AcceptedInviteNot {
+  enum OpCode {
+    OP_REFUSE = 0;  // 拒绝
+    OP_ACCEPT = 1; // 接受
+  }
+  string match_cid = 1; // 场次ID
+  int32 share_code = 2; // 邀请码
+  string inviter = 3; // 邀请人
+  repeated string opp_list = 4; // 对手列表
+  string invitee = 5; // 被邀请人
+  OpCode accepted = 6; // 接受/拒绝通知
+}
+
+message AcceptedInviteReq {
+  enum OpCode {
+    OP_REFUSE = 0;  // 拒绝
+    OP_ACCEPT = 1; // 接受
+  }
+  string match_cid = 1; // 场次ID
+  int32 share_code = 2; // 邀请码
+  OpCode accepted = 6; // 接受/拒绝通知
+}
+
+message AcceptedInviteRsp {
+  string err = 1;
+  string match_cid = 2; // 场次ID
+  int32 share_code = 3; // 邀请码
+}
+
+message UpdateMatchLabelsReq {
+  string match_id = 1;
+  repeated string add_list = 2; // 新增标签列表
+  repeated string remove_list = 3; // 移除标签列表
+  repeated string player_list = 4; // 添加玩家，如果不设置此参数，则直接对所有参与到本场比赛的玩家都会生效
+}
+
+message UpdateMatchLabelsRsp {
+  string err = 1;
+}
+
+// 机器人配置
+message RobotConfig {
+  //@inject_tag: bson:"use_robot"
+  bool  use_robot = 1;
+  //@inject_tag: bson:"join_wait_sec"
+  int32 join_wait_sec = 2;
+  //@inject_tag: bson:"deviation"
+  int32  deviation = 3;
+  //@inject_tag: bson:"need_robot_num"
+  int32 need_robot_num = 4;
+}
+
+message MatchConfig {
+  //@inject_tag: bson:"robot_config"
+  RobotConfig robot_config = 1; // 匹配控制
+  //@inject_tag: bson:"metadata"
+  map<string, string> metadata = 2;
+}
+
+message GetStatisticsMetricsReq {
+  string openid = 1;
+  string game_gid = 2;
+  string label = 3; // 默认为所有游戏, 可以指定标签
+}
+
+message GetStatisticsMetricsRsp {
+  string err = 1;
+  int32 total_count = 2; // 总局数
+  int32 win_count = 3; // 胜利局数
+}
+
+
+message GetLatestRoundListReq {
+  string metrics = 1;
+  string openid = 2;
+  string game_gid = 3;
+}
+
+message GetLatestRoundListRsp {
+  message RoundInfo {
+    string match_id = 1;
+    string round_id = 2;
+    string match_cid = 3;
+    int64 finish_time = 4;
+  }
+  string err = 1;
+  repeated RoundInfo round_list = 2;
+}
+

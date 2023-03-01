@@ -1,0 +1,29 @@
+syntax = "proto3";
+option go_package = "proto;robot";
+
+//////////////////////////////////////////
+service Robot {
+  // 通知机器人入桌
+  rpc NotifyJoinRoom(NotifyJoinRoomReq) returns (NotifyJoinRoomRsp) {}
+}
+
+message NotifyJoinRoomReq {
+  // 服务器ID
+  string server_id = 1;
+  // 房间规则
+  string  rule_id = 2;
+  // 房间号
+  string room_id = 3;
+  // 机器人数量
+  int32 robot_num = 4;
+}
+
+message NotifyJoinRoomRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+}
+
+message TransportMessage {
+  map<string, string> header = 1;
+  bytes body = 2;
+}

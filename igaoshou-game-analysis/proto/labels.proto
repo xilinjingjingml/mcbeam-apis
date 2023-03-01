@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package analysis;
+option go_package = "proto;analysis";
+
+
+enum UserLabel {
+  Normal = 0; // 普通玩家
+  Recharge = 1; // 付费玩家
+}

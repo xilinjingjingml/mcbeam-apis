@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option go_package = "./proto;common";
+
+
+// 刷新缓存
+// topic.RefreshCacheTopic
+message RefreshCache {
+  string module = 1;    // 需要刷新的模块
+}
+
+
+// 玩家登陆通知
+// topic.LoginEventTopic
+message LoginNot {
+  string openid = 1;
+  string game_gid = 2;
+  string uuid = 3;
+  int64 reg_time = 4;
+  int64 game_reg_time = 5; // 第一次加入游戏时间(当前游戏)
+  string nickname = 6;
+  int32 sex = 7;
+  string headimage = 8;
+  int32 plat_level = 9; // 平台level
+  int32 plat_exp = 10; // 平台 exp
+  int32 level = 11; // 游戏等级
+  int32 exp = 12; // 游戏经验值
+  string pn = 13;
+  int32 plat_aid = 14;
+  int64 login_time = 15;
+}
+
+// 玩家会话断开
+// topic.SessionCloseTopic
+message SessionCloseNot {
+  string sid = 1;
+  string openid = 2;
+}
+
+// 玩家状态
+//topic.PlayerStatusChangeTopic
+message PlayerStatus {
+  string openid = 1;
+  string game_gid = 2;
+  string uuid = 3;
+  string pn = 4;
+  int64 reg_time = 5;  // 注册时间
+  int64 login_time = 6; // 登录时间
+  int64 offline_time = 7; // 离线时间
+  int32 plat_aid = 8;  // 平台ID
+  string nickname = 9;  // 昵称
+  string avatar = 10; // 头像
+  bool online = 11; // 是否在线
+}

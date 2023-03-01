@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+
+option go_package = "./proto;robot";
+//////////////////////////////////////////
+service RobotRpc {
+  // 通知机器人入桌
+  rpc NotifyJoinRoom(NotifyJoinRoomReq) returns (NotifyJoinRoomRsp) {}
+  // 通知机器人加入比赛
+  rpc NotifyJoinMatch(NotifyJoinMatchReq) returns(NotifyJoinMatchRsp) {}
+}
+
+message NotifyJoinRoomReq {
+  // 服务器ID
+  string server_id = 1;
+  // 房间规则
+  string  rule_id = 2;
+  // 房间号
+  string room_id = 3;
+  // 机器人数量
+  int32 robot_num = 4;
+}
+
+message NotifyJoinRoomRsp {
+  int32 err_code = 1;
+  string err_msg = 2;
+}
+
+
+message NotifyJoinMatchReq {
+  // 玩家ID
+  string openid = 1;
+  //  房间号
+  string room_id = 2;
+  // 服务器ID
+  string server_id = 3;
+  // 平台ID
+  int32 plat_aid = 4;
+  string game_gid = 5;
+}
+
+message NotifyJoinMatchRsp {
+  string err = 1;
+}

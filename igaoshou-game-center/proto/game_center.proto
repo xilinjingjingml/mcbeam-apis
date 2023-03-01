@@ -1,0 +1,155 @@
+syntax = "proto3";
+
+
+package game_center;
+
+option go_package = "proto;game_center";
+
+import "github.com/micro/micro/proto/api/api.proto";
+
+
+service Center{
+  rpc GetPopInfo(api.Request) returns(api.Response) {}
+  rpc GetIpLocal(api.Request) returns (api.Response) {}
+
+  rpc GetGameReport(api.Request) returns(api.Response) {}
+}
+
+service User {
+  // 游戏账变
+  rpc ListBalanceLog(ListBalanceLogReq) returns (ListBalanceLogRsp) {}
+}
+
+service Rank {
+  rpc ItemRank(ItemRankReq) returns (ItemRankRsp) {}
+}
+
+service BaiYuan {
+  // 玩家百元数据
+  rpc GetPlayerData(GetPlayerDataReq) returns (GetPlayerDataRsp) {}
+}
+
+service BaiYuanRpc {
+  // 查询玩家状态
+  rpc GetPlayerStats(GetPlayerStatsReq) returns (GetPlayerStatsRsp) {}
+  rpc AdNotifyState(AdNotifyStateReq) returns (AdNotifyStateRsp) {}
+}
+
+// 客户端存储数据
+service Store {
+  rpc Set(StoreSetReq) returns(StoreSetRsp) {}
+  rpc Get(StoreGetReq) returns (StoreGetRsp) {}
+  rpc Delete(StoreDeleteReq)returns(StoreDeleteRsp) {}
+}
+
+message GetPlayerDataReq {
+
+}
+
+enum Step {
+  Invalied = 0; // 无效
+  ItemStep = 1; // 集满道具阶段
+  RoundStep = 2; // 完成局数阶段
+  PlayAdStep = 3; // 看广告阶段
+  LevelStep = 4; // 等级阶段
+  CompletedStep = 100; // 完成所有条件
+};
+
+message GetPlayerDataRsp {
+  string err = 1;
+  int32 step = 2;
+  string data = 3;
+  int32 level = 4;
+}
+
+message GetPlayerStatsReq {
+  string openid = 1;
+  string game_gid = 2;
+  int32 plat_aid = 3;
+}
+
+message GetPlayerStatsRsp {
+  Step step = 1;
+}
+message AdNotifyStateReq {
+  string ad_param = 1;
+}
+
+message AdNotifyStateRsp {
+  string code = 1;
+  string award_list = 2;
+}
+
+
+message ItemRankReq {
+  int32 item_id = 1;
+  int32 start = 2; // 开始名次
+  int32 end = 3; // 结束名次
+}
+
+message RankData {
+  string openid = 1;
+  int64 rank = 2;
+  int64 value = 3;
+  string nickname = 4; // 昵称
+  string head_image = 5; // 头像
+  string area_info = 6; // 区域信息
+}
+
+message ItemRankRsp {
+  string err = 1;
+  repeated RankData rank_list = 2;
+}
+
+message StoreSetReq {
+  string key = 1;
+  string value = 2;
+}
+
+message StoreSetRsp {
+  string err = 1;
+}
+
+message StoreGetReq {
+  string key = 1;
+}
+
+message StoreGetRsp {
+  string err = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message StoreDeleteReq {
+  string key = 1;
+}
+
+message StoreDeleteRsp{
+  string err = 1;
+}
+
+message ListBalanceLogReq {
+  // @inject_tag: json:"item_list"
+  string item_list = 1; // 道具ID列表，逗号分割
+  int32 num = 2; // 账变条数
+  int64 cursor = 3; // 默认不传，或者传入 Response返回的cursor
+  string openid = 4;
+  string game_gid = 5;
+  string uuid = 6;
+}
+
+message ListBalanceLogRsp {
+  message Record {
+    string openid = 1;
+    string game_gid = 2;
+    string reason = 3;
+//    int32 index = 4;
+    int64 ts = 5;
+    string change = 6;
+    string metadata = 7;
+  }
+  string err = 1;
+  repeated Record logs = 2;
+  int64 cursor = 3;
+  int32 row_num = 4;
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+option go_package = "proto;version";
+
+import "github.com/micro/micro/proto/api/api.proto";
+
+service Config {
+  rpc Get(api.Request) returns (api.Response) {}
+  // 获取在线参数
+  rpc GetOnlineParam(api.Request) returns (api.Response) {}
+  rpc LoadGameInfo(api.Request) returns (api.Response) {}
+  // 检查热更新
+  rpc CheckUpdate(api.Request) returns (api.Response) {}
+  // 获取游戏列表配置
+  rpc LoadMatchConfig(api.Request) returns (api.Response) {}
+  // 获取公告
+  rpc LoadNotice(api.Request) returns (api.Response) {}
+  //  // 更新缓存
+  //  rpc Refresh(api.Request) returns (api.Response) {}
+}
+
+service ConfigRpc {
+  // 更新缓存
+  rpc Refresh(RefreshCacheReq) returns (RefreshCacheRsp) {}
+}
+
+message GetConfigReq {
+  string key = 1;
+}
+
+message GetConfigRsp {
+  string value = 1;
+}
+
+message RefreshCacheReq {
+
+}
+
+message RefreshCacheRsp {
+  string err = 1;
+}

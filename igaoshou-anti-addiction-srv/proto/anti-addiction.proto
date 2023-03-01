@@ -1,0 +1,46 @@
+syntax="proto3";
+package proto;
+
+service AntiAddiction {
+	rpc Check(CheckReq) returns (CheckRes) {}   //认证
+	rpc Query(QueryReq) returns (QueryRes) {}   //查询
+}
+
+message CheckReq {
+	string name = 1;
+	string idNum = 2;
+}
+
+message CheckRes {
+	string code = 1;
+	string msg = 2;
+	string status = 3;
+}
+
+message QueryReq {
+}
+
+message QueryRes {
+	string code = 1;
+	string msg = 2;
+	string status = 3;
+}
+
+message AntiAddictionLog {
+    //@inject_tag: bson:"plat_aid"
+    int32 plat_aid = 1;
+    //@inject_tag: bson:"uuid"
+    string uuid = 2;
+    //@inject_tag: bson:"ai"
+    string ai = 3;
+    //@inject_tag: bson:"status"
+    string status = 4;
+    //@inject_tag: bson:"pi"
+    string pi = 5;
+    //@inject_tag: bson:"name"
+    string name = 6;
+    //@inject_tag: bson:"idNum"
+    string idNum = 7;
+    //@inject_tag: bson:"time"
+    int64 time = 8;
+}

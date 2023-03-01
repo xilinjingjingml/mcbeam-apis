@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package gsm;
+option go_package = "./proto;gsm";
+
+service Rooms {
+  // 创建房间
+  rpc CreateRoom(CreateRoomReq) returns (CreateRoomRsp) {}
+  //获取房间信息
+  rpc GetRoomInfo(GetRoomInfoReq) returns (GetRoomInfoRsp) {}
+  // 检查房间是否存在
+  rpc CheckRoomExists(CheckRoomExistsReq) returns (CheckRoomExistsRsp) {}
+  // 踢出房间玩家
+  rpc KickPlayer(KickPlayerReq) returns (KickPlayerRsp) {}
+}
+
+message Empty{}
+
+// 创建房间请求
+message CreateRoomReq {
+  string game_id = 1; // 游戏ID
+  string properties = 2; // 房间参数，内容自定义
+  string room_id = 3; // 房间ID
+  map<string, string> metadata = 4; // 私有数据
+  repeated string labels = 5; // 标签
+  repeated string aliases = 6; // 别名
+}
+
+message GamePlayerStats {
+  //@inject_tag: bson:"openid"
+  string  openid = 1; // 玩家ID
+  //@inject_tag: bson:"metadata"
+  map<string, string> metadata = 2;
+  //@inject_tag: bson:"nickname"
+  string nickname = 3;
+  //  int32 type = 4;
+  //@inject_tag: bson:"avatar"
+  string avatar = 5; // 头像
+  //@inject_tag: bson:"status"
+  PlayerGameStatus status = 6;   // 玩家状态
+}
+
+enum PlayerGameStatus {
+  Invalid = 0;
+  Joined = 1;// 已加入
+  Leave = 2;// 已离开
+}
+// 房间类型
+enum RoomType {
+  NormalRoom = 0; // 普通房
+  PrivateRoom = 1; // 私人房
+  ClubRoom = 2; // 俱乐部房间
+}
+
+// 房间信息
+message RoomInfo {
+  string room_id = 1; // 房间ID
+  string server_id = 2; // 房间所在服务器信息
+  string game_gid = 3; // 游戏ID
+  string match_cid = 4; // 房间匹配码，场次ID match_cid
+  int32 max_player_num = 5; // 房间内参与人数上限
+  string owner = 6; // 房间创建者
+  string properties = 7; // 房间属性
+  int64 create_time = 10;  // 房间创建时间
+  repeated string labels = 11; // 标签
+  repeated string aliases = 12; // 别名
+  repeated GamePlayerStats players = 13; // 玩家列表
+  RoomType type = 14; // 房间类型
+  string share_code = 15; // 分享码
+  int32 plat_aid = 16;// 平台
+  int32 min_player_num = 17;  // 最小玩家数量
+  string stats = 18;
+}
+
+// 创建房间请求回复
+message CreateRoomRsp {
+  string err = 1; // 请求错误提示
+  RoomInfo room = 2; // 创建成功的房间信息
+}
+
+message CheckRoomExistsReq {
+  string room_id = 1; // 房间ID
+  string server_id = 2;
+  string game_gid = 3;
+}
+message CheckRoomExistsRsp {
+  bool exists = 1;
+}
+
+// 获取指定房间信息请求
+message GetRoomInfoReq {
+  string room_id = 1; // 房间ID
+  string server_id = 2;
+}
+
+// 请求的房间信息回复
+message GetRoomInfoRsp {
+  string err = 1; // 错误标识
+  RoomInfo room = 2; // 房间信息
+}
+
+message KickPlayerReq {
+  string room_id = 1;
+  string openid = 2;
+  string admin = 3;
+}
+
+message KickPlayerRsp {
+  string err = 1;
+}

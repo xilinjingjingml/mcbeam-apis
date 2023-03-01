@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package analysis;
+option go_package = "proto;analysis";
+
+
+service GameData {
+  rpc GetGameReport(GetGameReportReq) returns (GetGameReportRsp) {}
+  rpc GetPlayerLabels(GetPlayerLabelsReq) returns (GetPlayerLabelsRsp) {}
+}
+
+
+
+message GetGameReportReq {
+  string openid = 1;
+  string metrics = 2;
+  int32 plat_aid = 3;
+  string game_gid = 4;
+}
+
+message GetGameReportRsp {
+  string data = 1;
+}
+
+message GetPlayerLabelsReq {
+  string openid = 1;
+  int32 plat_aid = 2;
+  string game_gid = 3;
+}
+
+message GetPlayerLabelsRsp {
+  string err = 1;
+  repeated string labels = 2;
+}

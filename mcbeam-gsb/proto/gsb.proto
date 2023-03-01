@@ -1,0 +1,287 @@
+syntax = "proto3";
+
+package gsbase;
+option go_package = "./;gsbase";
+
+import "proto/define.proto";
+
+enum Version {
+  major = 0;
+  minor = 1;
+}
+
+service GsBase {
+  // 加入房间
+  rpc JoinRoom(JoinRoomReq) returns (Empty) {}
+  // 离开房间
+  rpc LeaveRoom(LeaveRoomReq) returns (Empty) {}
+  // 心跳
+  rpc Ping(GsbPing) returns (Empty) {}
+  // 聊天
+  rpc Chat(ChatReq) returns (Empty) {}
+  // 申请解散房间
+  rpc ApplyDismiss(ApplyDismissReq)returns(Empty) {}
+  // 回复解散请求
+  rpc ReplyDismiss(ReplyDismissReq) returns(Empty) {}
+  // 踢人
+  rpc KickOut(KickOutReq) returns (Empty) {}
+}
+
+service GsRpc {
+  // 创建房间回调
+  rpc CreateRoom(CreateRoomReq) returns (CreateRoomRsp) {}
+  // 解散房间
+  rpc DismissRoom(DismissRoomReq) returns (DismissRoomRsp) {}
+  // 检查房间是否存在
+  rpc CheckRoomStatus(CheckRoomStatusReq) returns (CheckRoomStatusRsp) {}
+  //  获取房间信息
+  rpc GetRoomInfo(GetRoomInfoReq) returns (GetRoomInfoRsp) {}
+  // 踢人
+  rpc KickOut(KickOutReq) returns (KickOutRsp) {}
+
+}
+message Empty{}
+
+message JoinRoomReq {
+  string room_id = 1;
+  string token = 2;
+  map<string, string> metadata = 3; // 扩展信息
+}
+
+message JoinRoomRsp {
+  string err = 1;
+  RoomInfo room = 2;
+}
+
+message JoinRoomNot {
+  string openid = 1; // 加入的玩家
+  RoomInfo room = 2;
+}
+
+message LeaveRoomReq {
+
+}
+
+message LeaveRoomRsp{
+  string err = 1;
+  string openid = 2; // 离开的玩家
+}
+
+message LeaveRoomNot{
+  enum Type {
+    Leave = 0;
+    Kick = 1;
+  }
+  string ply_id = 1;
+  Type reason = 2; // 0 正常离开 1房主踢人
+}
+
+message DismissNot {
+  enum Type {
+    GameOverDismiss = 0; // 游戏结束
+    OwnerDismiss = 1; // 房主解散
+    UserDismiss = 2; // 玩家申请解散
+    TimeOutDismiss = 3; // 超时解散
+    AdminDismiss = 4; // 管理员解散
+  }
+  string msg = 1;
+  Type code = 2;
+}
+
+// ping
+message GsbPing {
+  int64 now = 1;
+}
+
+message GsbPong {
+  string err = 1;
+  int64 cli_now = 2;  // 客户端上传时间
+  int64 now = 3; // 服务器当前时间
+}
+
+enum ChatType {
+  Text = 0; // 文本
+  Emoji = 1; // 表情
+}
+
+message ChatReq {
+  ChatType type = 1;
+  string content = 2; // 内容
+  string to = 3; // 指定玩家
+}
+
+message ChatRsp {
+  string err = 1;
+}
+
+message ChatNot {
+  string from = 1;
+  string to = 2;
+  ChatType type = 3;
+  string content = 4; // 内容
+}
+
+message CreateRoomReq {
+  string room_id = 1; // 房间ID
+  string properties = 2; // 房间参数，json格式
+  string owner = 3; //创建者
+  repeated string labels = 4; // 房间标签
+  repeated string aliases = 5; // 房间别名
+}
+
+message CreateRoomRsp {
+  string err = 1;
+  string server_id = 2; // 服务器ID
+  string room_id = 3; // 房间ID
+  string game_gid = 4; // 游戏id
+  string metadata = 5; // 房间参数 json格式
+  string creator = 6; // 创建者
+  int64 create_at = 7; // 创建时间
+  int32 min_player_num = 8; // 最小玩家数量
+  int32 max_player_num = 9; // 最大玩家数量
+  repeated string labels = 10; // 标签
+  repeated string aliases = 11; // 别名
+  repeated GamePlayerStats players = 12; // 玩家列表
+  int32 plat_aid = 13; // 平台ID
+  string share_code = 14; // 分享码
+  string rule_id = 15; // 场次ID
+  RoomType type = 16;
+  string stats = 17; // 房间状态数据，json字符串
+}
+
+message DismissRoomReq {
+  string openid = 1;
+  string room_id = 2; // 房间ID
+}
+
+message DismissRoomRsp {
+  string err = 1;
+}
+
+
+message RoomInfo {
+  string room_id = 1; // 房间ID
+  string match_code = 2; // 房间匹配规则
+  string metadata = 3; // 房间参数 json 格式
+  repeated GamePlayerStats players = 4;
+  string owner = 5;
+  int64 create_at = 6; // 创建时间
+  int32 min_player_num = 7; // 最小玩家数量
+  int32 max_player_num = 8; // 最大玩家数量
+  string game_gid = 9;// 游戏ID
+  string server_id = 10; // 服务器ID
+  repeated string labels = 11; // 标签
+  repeated string aliases = 12; // 别名
+  int32 plat_aid = 13; // 平台ID
+  string share_code = 14; // 分享码
+  //  string rule_id = 15; // 场次ID
+  RoomType type = 16;
+  string stats = 17; // 房间状态数据，json字符串
+
+}
+
+message CheckRoomStatusReq {
+  string room_id = 1;
+}
+
+message CheckRoomStatusRsp {
+  bool exists = 1;
+}
+
+message GetRoomInfoReq {
+  string room_id = 1;
+}
+
+message GetRoomInfoRsp {
+  RoomInfo room = 1;
+  string err = 2;
+}
+
+message UpdateRoomInfoReq {
+  string room_id = 1;
+  map<string, string> properties = 2; // 房间参数，内容自定义
+}
+
+message UpdateRoomInfoRsp {
+  string err = 1;
+}
+
+message SystemMessage {
+  int32 code = 1;
+  string err = 2;
+  string request = 3;
+}
+
+message GameEvent {
+  string room_id = 1;
+  string game_gid = 2;
+  int32 plat_aid = 3;
+  string rule_id = 4; // 场次ID
+  string match_id = 5;// 匹配ID
+  string event_id = 6; // 事件ID
+  map<string, string> event_params = 7; // 事件参数
+  int64 create_at = 8;
+}
+
+message PlayerEvent {
+  string room_id = 1;
+  string game_gid = 2;
+  int32 plat_aid = 3;
+  string event_id = 4; // 事件ID
+  string openid = 5; // 玩家ID，如果和玩家相关，此ID不为空
+  map<string, string> event_params = 6; // 事件参数
+  string rule_id = 7; // 场次ID
+  string match_id = 8; // 匹配ID
+  int64 create_at = 9;
+}
+
+// 申请解散
+message ApplyDismissReq{
+
+}
+
+message ApplyDismissRsp{
+  string err = 1;
+}
+
+message ApplyDismissNot {
+  message Status {
+    string openid = 1;
+    int64 op_time = 2;
+    bool reply = 3;
+  }
+  string openid = 1; // 申请解散玩家
+  int64 apply_time = 2; // 申请解散时间
+  int64 expire = 3; // 申请有效时间 单位s，正常60
+  repeated Status status = 4; // 当前回复状态
+}
+
+// 解散申请回复
+message ReplyDismissReq {
+  bool reply = 1; // true同意 false不同意
+}
+
+message ReplyDismissRsp{
+  string err = 1;
+}
+
+message ReplyDismissNot{
+  message ReplyInfo {
+    string openid = 1;
+    bool reply = 2;
+    int64 op_time = 3;
+  }
+  string openid = 1;
+  bool reply = 2;
+  repeated ReplyInfo reply_list = 3; // 确认列表
+}
+
+message KickOutReq {
+  string openid = 1;
+  string room_id = 2;
+  string operator = 3 ;
+}
+
+message KickOutRsp {
+  string  err = 1;
+}
